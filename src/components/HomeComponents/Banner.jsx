@@ -11,7 +11,6 @@ const Banner = () => {
     return (
         <Carousel autoPlay={true} infiniteLoop={true}>
 
-            {/* Slide */}
             <div className="slide-box">
                 <img src={slide1} className="slide-img" />
             </div>
