@@ -1,5 +1,6 @@
 
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaGithub } from 'react-icons/fa';
+import { FaFacebookF, FaLinkedinIn, FaInstagram, FaGithub } from 'react-icons/fa';
+import { FaSquareXTwitter } from 'react-icons/fa6';
 import { MdEmail, MdPhone, MdLocationOn } from 'react-icons/md';
 import { Link } from 'react-router';
 
@@ -7,7 +8,7 @@ const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-300">
+        <footer className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-accent">
             {/* Main Footer Content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -15,12 +16,12 @@ const Footer = () => {
                     {/* Brand Section */}
                     <div className="space-y-4">
                         <div className="flex items-center space-x-2">
-                            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                            <Link to='/' className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center btn btn-ghost text">
                                 <span className="text-white font-bold text-xl">DL</span>
-                            </div>
+                            </Link>
                             <h3 className="text-2xl font-bold text-white">Digital Life Lessons</h3>
                         </div>
-                        <p className="text-gray-400 text-sm leading-relaxed">
+                        <p className="text-accent text-sm leading-relaxed">
                             Preserve your wisdom, share your insights, and grow together. A platform dedicated to meaningful life lessons and personal growth.
                         </p>
                         <div className="flex space-x-3">
@@ -40,7 +41,7 @@ const Footer = () => {
                                 className="w-9 h-9 bg-slate-700 hover:bg-black rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
                                 aria-label="X (Twitter)"
                             >
-                                <FaTwitter className="text-sm" />
+                                <FaSquareXTwitter className="text-sm" />
                             </a>
                             <a
                                 href="https://linkedin.com"
