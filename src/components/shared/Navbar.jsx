@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, NavLink } from 'react-router';
 import './navbar.css'
 import useAuth from '../../hooks/useAuth';
@@ -8,10 +8,25 @@ import Swal from 'sweetalert2';
 const Navbar = () => {
 
     const { user, logOut } = useAuth();
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    // handle click outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropdownOpen(false);
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const handleLogOut = () => {
         logOut()
             .then(() => {
+                setIsDropdownOpen(false); // Close dropdown on logout
                 Swal.fire({
                     title: "Successfully logged out!",
                     icon: "success",
@@ -54,8 +69,68 @@ const Navbar = () => {
             </div>
             <div className="navbar-end">
                 {
-                    user ? <a onClick={handleLogOut} className="btn btn-secondary">Log Out</a> :
+                    user ? (
+                        // Profile Dropdown Section
+                        <div className="relative" ref={dropdownRef}>
+                            {/* Profile Button */}
+                            <button
+                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                className="btn btn-ghost btn-circle avatar"
+                            >
+                                <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                    <img
+                                        src={user?.photoURL}
+                                        alt={user?.displayName || 'User'}
+                                    />
+                                </div>
+                            </button>
+
+                            {/* Dropdown Menu */}
+                            {isDropdownOpen && (
+                                <div className="absolute right-0 mt-2 w-56 bg-base-100 rounded-box shadow-lg border border-base-300 z-50">
+                                    {/* User Info */}
+                                    <div className="px-4 py-3 border-b border-base-300">
+                                        <p className="text-sm font-semibold">
+                                            {user?.displayName || 'User'}
+                                        </p>
+                                        <p className="text-xs text-gray-500 truncate">
+                                            {user?.email}
+                                        </p>
+                                    </div>
+
+                                    {/* Menu Items */}
+                                    <ul className="menu menu-sm p-2">
+                                        <li>
+                                            <Link
+                                                to="/profile"
+                                                onClick={() => setIsDropdownOpen(false)}
+                                            >
+                                                👤 Profile
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link
+                                                to="/dashboard"
+                                                onClick={() => setIsDropdownOpen(false)}
+                                            >
+                                                📊 Dashboard
+                                            </Link>
+                                        </li>
+                                        <li className="border-t border-base-300 mt-2 pt-2">
+                                            <a
+                                                onClick={handleLogOut}
+                                                className="text-error"
+                                            >
+                                                🚪 Log out
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
                         <Link className='btn btn-primary' to='/login'>Log in</Link>
+                    )
                 }
             </div>
         </div>
