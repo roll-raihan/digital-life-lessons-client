@@ -4,21 +4,44 @@ import { Link } from 'react-router';
 import useAuth from '../../hooks/useAuth';
 import { toast, ToastContainer } from 'react-toastify';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 const Register = () => {
 
-    const { registerUser, signInWithGoogle } = useAuth();
+    const { registerUser, signInWithGoogle, updateUserProfile } = useAuth();
     const { register,
         handleSubmit, formState: { errors } } = useForm();
 
     const handleRegister = (data) => {
         // console.log('output of register', data);
+        const profileImg = data.photo[0];
         registerUser(data.email, data.password)
             .then(() => {
+
+                const formData = new FormData();
+                formData.append('image', profileImg);
+                const image_URL_API = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`;
+                axios.post(image_URL_API, formData)
+                    .then(res => {
+                        // console.log('after image upload', res.data.data.url);
+
+                        const updateProfile = {
+                            displayName: data.name,
+                            photoURL: res.data.data.url
+                        }
+
+                        updateUserProfile(updateProfile)
+                            .then(() => {
+                                // console.log('profile updated')
+                            })
+                            .catch(error => toast(error.message))
+                    })
+
                 Swal.fire({
                     title: "Successfully registered!",
                     icon: "success",
-                    draggable: true
+                    draggable: true,
+                    timer: 1500
                 });
             })
             .catch(error => {
@@ -33,7 +56,8 @@ const Register = () => {
                 Swal.fire({
                     title: "Successfully registered!",
                     icon: "success",
-                    draggable: true
+                    draggable: true,
+                    timer: 1500
                 });
             })
             .catch((error) => {
@@ -47,6 +71,19 @@ const Register = () => {
             <ToastContainer></ToastContainer>
             <form className='card-body' onSubmit={handleSubmit(handleRegister)}>
                 <fieldset className="fieldset">
+
+                    <label className="label">Name</label>
+                    <input type="text" {...register('name', { required: true })} className="input" placeholder="Name" />
+                    {
+                        errors.name?.type === 'required' && <p className='text-red-500'>Name is required</p>
+                    }
+
+                    <label className="label">Photo</label>
+                    <input type="file" {...register('photo', { required: true })} className="file-input" placeholder="Photo URL" />
+                    {
+                        errors.photo?.type === 'required' && <p className='text-red-500'>Photo is required</p>
+                    }
+
                     <label className="label">Email</label>
                     <input type="email" {...register('email', { required: true })} className="input" placeholder="Email" />
                     {

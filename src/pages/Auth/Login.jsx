@@ -18,7 +18,8 @@ const Login = () => {
                 Swal.fire({
                     title: "Successfully logged in!",
                     icon: "success",
-                    draggable: true
+                    draggable: true,
+                    timer: 1500
                 });
             })
             .catch(error => {
@@ -32,7 +33,8 @@ const Login = () => {
                 Swal.fire({
                     title: "Successfully logged in!",
                     icon: "success",
-                    draggable: true
+                    draggable: true,
+                    timer: 1500
                 });
             })
             .catch((error) => {
