@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import { Link } from 'react-router';
 import useAuth from '../../hooks/useAuth';
 import { toast, ToastContainer } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 const Register = () => {
 
@@ -11,11 +12,14 @@ const Register = () => {
         handleSubmit, formState: { errors } } = useForm();
 
     const handleRegister = (data) => {
-        console.log('output of register', data);
+        // console.log('output of register', data);
         registerUser(data.email, data.password)
             .then(() => {
-                toast('Successfully registered!')
-                // console.log(result.user)
+                Swal.fire({
+                    title: "Successfully registered!",
+                    icon: "success",
+                    draggable: true
+                });
             })
             .catch(error => {
                 toast(error.message)
@@ -26,7 +30,11 @@ const Register = () => {
     const handleGoogleSignIn = () => {
         signInWithGoogle()
             .then(() => {
-                toast('Successfully registered!')
+                Swal.fire({
+                    title: "Successfully registered!",
+                    icon: "success",
+                    draggable: true
+                });
             })
             .catch((error) => {
                 toast(error.message)
