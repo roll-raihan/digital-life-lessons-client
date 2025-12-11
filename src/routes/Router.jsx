@@ -4,6 +4,11 @@ import Home from "../pages/Home/Home";
 import ErrorPage from "../components/shared/ErrorPage";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import MyLessons from "../pages/Dashboard/MyLessons";
+import PrivateRoute from "./PrivateRoute";
+import AddLessons from "../pages/Dashboard/AddLessons";
+import BePremium from "../pages/BePremium/BePremium";
 
 export const router = createBrowserRouter([
     {
@@ -22,6 +27,28 @@ export const router = createBrowserRouter([
             {
                 path: '/register',
                 Component: Register
+            },
+            {
+                path: '/be-premium',
+                element: <PrivateRoute>
+                    <BePremium></BePremium>
+                </PrivateRoute>
+            },
+            {
+                path: '/dashboard',
+                element: <PrivateRoute>
+                    <Dashboard></Dashboard>
+                </PrivateRoute>,
+                children: [
+                    {
+                        path: '/dashboard/my-lessons',
+                        Component: MyLessons
+                    },
+                    {
+                        path: '/dashboard/add-lessons',
+                        Component: AddLessons
+                    }
+                ]
             }
         ]
     },

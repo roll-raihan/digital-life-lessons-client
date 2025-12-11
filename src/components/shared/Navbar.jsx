@@ -40,8 +40,9 @@ const Navbar = () => {
 
     const links = <>
         <li><NavLink to='/public-lessons'>Public Lessons</NavLink></li>
+        <li><NavLink to='/dashboard/add-lessons'>Add Lessons</NavLink></li>
+        <li><NavLink to='/dashboard/my-lessons'>My Lessons</NavLink></li>
         <li><NavLink to='/be-premium'>Be Premium</NavLink></li>
-        <li><NavLink to='/dashboard'>Dashboard</NavLink></li>
     </>
 
     return (
