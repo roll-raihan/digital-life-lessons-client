@@ -30,7 +30,8 @@ const Navbar = () => {
                 Swal.fire({
                     title: "Successfully logged out!",
                     icon: "success",
-                    draggable: true
+                    draggable: true,
+                    timer: 1500
                 });
             })
             .catch((error) => {

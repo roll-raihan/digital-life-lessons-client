@@ -1,10 +1,16 @@
 import React from 'react';
 import { Camera, X, AlertCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import useAuth from '../../hooks/useAuth';
 
 const AddLesson = () => {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const {
+        register,
+        handleSubmit,
+        // formState: { errors }
+    } = useForm();
+    const { user } = useAuth();
 
     const handleAddLessons = (data) => {
         console.log(data);
@@ -22,6 +28,20 @@ const AddLesson = () => {
                 {/* Form Card */}
                 <form onSubmit={handleSubmit(handleAddLessons)} className="bg-white rounded-xl shadow-lg p-8">
                     <div className="space-y-6">
+                        {/* email */}
+                        <div>
+                            <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                Your Email <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                                type="email"
+                                name="title" {...register('email', { required: true })}
+                                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" disabled
+                                value
+                                ={`${user?.email}`}
+                            />
+                        </div>
+
                         {/* Lesson Title */}
                         <div>
                             <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -29,7 +49,7 @@ const AddLesson = () => {
                             </label>
                             <input
                                 type="text"
-                                name="title"
+                                name="email" {...register('lessonTitle')}
                                 className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                 placeholder="Enter a compelling title for your lesson"
                             />
@@ -42,7 +62,7 @@ const AddLesson = () => {
                             </label>
                             <textarea
                                 name="description"
-                                rows="8"
+                                rows="8" {...register('lessonDescription', { required: true })}
                                 className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
                                 placeholder="Share your experience, what you learned, and how it impacted you..."
                             />
@@ -55,7 +75,7 @@ const AddLesson = () => {
                                 Category <span className="text-red-500">*</span>
                             </label>
                             <select
-                                name="category"
+                                name="category" {...register('lessonCategory', { required: true })}
                                 className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white cursor-pointer"
                             >
                                 <option value="">Select a category</option>
@@ -73,7 +93,7 @@ const AddLesson = () => {
                                 Emotional Tone <span className="text-red-500">*</span>
                             </label>
                             <select
-                                name="emotionalTone"
+                                name="emotionalTone" {...register('lessonEmotion', { required: true })}
                                 className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white cursor-pointer"
                             >
                                 <option value="">Select emotional tone</option>
@@ -129,7 +149,7 @@ const AddLesson = () => {
                                 Privacy <span className="text-red-500">*</span>
                             </label>
                             <select
-                                name="privacy"
+                                name="privacy" {...register('lessonPrivacy', { required: true })}
                                 className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white cursor-pointer"
                             >
                                 <option value="public">Public - Anyone can see this lesson</option>
