@@ -3,12 +3,13 @@ import { useQuery } from '@tanstack/react-query'
 import useAuth from '../../hooks/useAuth';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { Eye, EyeOff, Lock, Unlock, Info, Heart, Bookmark, Calendar, Edit, Trash2 } from 'lucide-react';
+import Swal from 'sweetalert2';
 
 const MyLessons = () => {
 
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
-    const { data: lessons = [] } = useQuery({
+    const { data: lessons = [], refetch } = useQuery({
         queryKey: ['my-lessons', user?.email],
         queryFn: async () => {
             const res = await axiosSecure.get(`/lessons?email=${user.email}`);
@@ -16,7 +17,37 @@ const MyLessons = () => {
         }
     })
 
-     const isPremiumUser = true;
+    const isPremiumUser = true;
+
+    const handleLessonDelete = id => {
+        console.log(id)
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                axiosSecure.delete(`/lessons/${id}`)
+                    .then(res => {
+                        console.log(res.data);
+
+                        if (res.data.deletedCount) {
+                            refetch();
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                        }
+                    })
+            }
+        });
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
@@ -109,24 +140,25 @@ const MyLessons = () => {
                             </thead>
                             <tbody className="divide-y divide-slate-200">
                                 {lessons.map((lesson) => (
-                                    <tr key={lesson.id} className="hover:bg-slate-50 transition-colors">
+                                    <tr key={lesson._id} className="hover:bg-slate-50 transition-colors">
                                         {/* Lesson Details */}
                                         <td className="px-6 py-4">
                                             <div className="max-w-xs">
                                                 <h3 className="text-sm font-semibold text-slate-800 mb-1">
-                                                    {lesson.title}
+                                                    {lesson.lessonTitle}
                                                 </h3>
-                                                <p className="text-xs text-slate-600 line-clamp-2">
+                                                {/* <p className="text-xs text-slate-600 line-clamp-2">
                                                     {lesson.description}
-                                                </p>
+                                                </p> */}
                                             </div>
                                         </td>
 
                                         {/* Visibility Toggle */}
                                         <td className="px-6 py-4">
-                                            <button className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${lesson.visibility === 'public'
-                                                    ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                                                    : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                                            <button className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${lesson.
+                                                lessonPrivacy === 'public'
+                                                ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                                                : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
                                                 }`}>
                                                 {lesson.visibility === 'public' ? (
                                                     <>
@@ -146,8 +178,8 @@ const MyLessons = () => {
                                         <td className="px-6 py-4">
                                             <button
                                                 className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${lesson.accessLevel === 'premium'
-                                                        ? 'bg-purple-100 text-purple-700 hover:bg-purple-200'
-                                                        : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                                                    ? 'bg-purple-100 text-purple-700 hover:bg-purple-200'
+                                                    : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
                                                     } ${!isPremiumUser ? 'opacity-50 cursor-not-allowed' : ''}`}
                                                 disabled={!isPremiumUser}
                                             >
@@ -198,7 +230,7 @@ const MyLessons = () => {
                                                 <button className="p-2 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 transition-colors">
                                                     <Edit className="w-4 h-4" />
                                                 </button>
-                                                <button className="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
+                                                <button onClick={() => handleLessonDelete(lesson._id)} className="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
                                             </div>
