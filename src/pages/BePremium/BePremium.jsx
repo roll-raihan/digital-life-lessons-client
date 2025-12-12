@@ -2,11 +2,16 @@ import React from 'react';
 import { Check, X, Crown, Sparkles, Zap, Star } from 'lucide-react';
 import useAuth from '../../hooks/useAuth';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import { useForm } from 'react-hook-form';
 
 const BePremium = () => {
 
+    const axiosSecure = useAxiosSecure();
     const { user } = useAuth();
-    const handlePayment = () => {
+    const { handleSubmit } = useForm();
+
+    const handlePayment = (data) => {
         const cost = 1500;
         console.log(cost);
         Swal.fire({
@@ -19,27 +24,27 @@ const BePremium = () => {
             confirmButtonText: "Yes, continue!"
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    title: "Yahooo!",
-                    text: "You are a premium user now.",
-                    icon: "success"
-                });
+
+                axiosSecure.post('/create-checkout-session', data)
+                    .then(res => {
+                        console.log('after saving premium', res.data)
+                    })
+                    .catch(err => {
+                        console.log('Error: ', err);
+                    })
+
+                // Swal.fire({
+                //     title: "Yahooo!",
+                //     text: "You are a premium user now.",
+                //     icon: "success"
+                // });
+
             }
         });
     }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-
-            <div className="flex items-center gap-4">
-                {user?.isPremium && (
-                    <div className="flex items-center gap-2 bg-gradient-to-r from-amber-400 to-yellow-500 text-white px-4 py-2 rounded-full font-semibold">
-                        <Crown className="w-4 h-4" />
-                        Premium ⭐
-                    </div>
-                )}
-                <button className="text-gray-600 hover:text-gray-900">Profile</button>
-            </div>
 
             {/* Main Content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -184,7 +189,7 @@ const BePremium = () => {
                             </li>
                         </ul>
 
-                        <button onClick={handlePayment} className="w-full py-4 px-6 rounded-lg bg-white text-indigo-600 font-bold text-lg hover:bg-indigo-50 transition-colors shadow-lg flex items-center justify-center gap-2">
+                        <button type='submit' onClick={handleSubmit(handlePayment)} className="w-full py-4 px-6 rounded-lg bg-white text-indigo-600 font-bold text-lg hover:bg-indigo-50 transition-colors shadow-lg flex items-center justify-center gap-2">
                             <Zap className="w-5 h-5" />
                             Upgrade to Premium
                         </button>

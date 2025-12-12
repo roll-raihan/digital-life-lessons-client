@@ -2,9 +2,12 @@ import React from 'react';
 import { Camera, X, AlertCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
+import Swal from 'sweetalert2';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const AddLesson = () => {
 
+    const axiosSecure = useAxiosSecure();
     const {
         register,
         handleSubmit,
@@ -14,6 +17,33 @@ const AddLesson = () => {
 
     const handleAddLessons = (data) => {
         console.log(data);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to add this lesson !",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, add!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                axiosSecure.post('/lessons', data)
+                    .then(res => {
+                        console.log('after saving premium', res.data)
+                    })
+                    .catch(err => {
+                        console.log('Error: ', err);
+                    })
+
+                Swal.fire({
+                    title: "Yahooo!",
+                    text: "Your lesson successfully added.",
+                    icon: "success"
+                });
+
+            }
+        });
     }
 
     return (
