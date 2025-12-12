@@ -20,7 +20,7 @@ const MyLessons = () => {
     const isPremiumUser = true;
 
     const handleLessonDelete = id => {
-        console.log(id)
+        // console.log(id)
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -34,7 +34,7 @@ const MyLessons = () => {
 
                 axiosSecure.delete(`/lessons/${id}`)
                     .then(res => {
-                        console.log(res.data);
+                        // console.log(res.data);
 
                         if (res.data.deletedCount) {
                             refetch();
@@ -45,6 +45,39 @@ const MyLessons = () => {
                             });
                         }
                     })
+            }
+        });
+    }
+
+    const handleEditLesson = id => {
+        console.log(id)
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to edit this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, edit !"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                axiosSecure.patch(`/lessons/${id}`)
+                    .then(res => {
+                        if (res.data.modifiedCount) {
+                            refetch();
+                            Swal.fire({
+                                title: "Edited!",
+                                text: "Your file has been edited.",
+                                icon: "success"
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        console.error("PATCH error:", err);
+                        Swal.fire("Error", "Failed to update lesson", "error");
+                    });
+
             }
         });
     }
@@ -102,7 +135,8 @@ const MyLessons = () => {
                             <div>
                                 <p className="text-sm text-slate-600 mb-1">Public Lessons</p>
                                 <p className="text-2xl font-bold text-slate-800">
-                                    {lessons.filter(l => l.visibility === 'public').length}
+                                    {lessons.filter(l => l.
+                                        lessonPrivacy === 'public').length}
                                 </p>
                             </div>
                             <div className="bg-green-100 p-3 rounded-lg">
@@ -227,7 +261,7 @@ const MyLessons = () => {
                                                 <button className="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
                                                     <Info className="w-4 h-4" />
                                                 </button>
-                                                <button className="p-2 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 transition-colors">
+                                                <button onClick={() => handleEditLesson(lesson._id)} className="p-2 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 transition-colors">
                                                     <Edit className="w-4 h-4" />
                                                 </button>
                                                 <button onClick={() => handleLessonDelete(lesson._id)} className="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
