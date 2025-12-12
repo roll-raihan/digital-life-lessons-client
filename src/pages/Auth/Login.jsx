@@ -11,7 +11,9 @@ const Login = () => {
     const navigate = useNavigate();
     const { signInUser, signInWithGoogle } = useAuth();
     const { register,
-        handleSubmit, formState: { errors } } = useForm();
+        handleSubmit,
+        formState: { errors }
+    } = useForm();
 
     const handleLogin = (data) => {
         // console.log('form data', data);

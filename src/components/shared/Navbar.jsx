@@ -43,7 +43,9 @@ const Navbar = () => {
         <li><NavLink to='/public-lessons'>Public Lessons</NavLink></li>
         <li><NavLink to='/dashboard/add-lessons'>Add Lessons</NavLink></li>
         <li><NavLink to='/dashboard/my-lessons'>My Lessons</NavLink></li>
-        <li><NavLink to='/be-premium'>Be Premium</NavLink></li>
+        {
+            user && <li><NavLink to='/be-premium'>Be Premium</NavLink></li>
+        }
     </>
 
     return (
