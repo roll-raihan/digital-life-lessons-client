@@ -62,7 +62,7 @@ const MyLessons = () => {
         }).then((result) => {
             if (result.isConfirmed) {
 
-                axiosSecure.patch(`/lessons/${id}`)
+                axiosSecure.patch(`/lessons/${id}`) // request problem. todo: explore and change
                     .then(res => {
                         if (res.data.modifiedCount) {
                             refetch();

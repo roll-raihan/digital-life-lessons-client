@@ -9,6 +9,8 @@ import MyLessons from "../pages/Dashboard/MyLessons";
 import PrivateRoute from "./PrivateRoute";
 import AddLessons from "../pages/Dashboard/AddLessons";
 import BePremium from "../pages/BePremium/BePremium";
+import Success from "../pages/payment/Success";
+import Cancel from "../pages/payment/Cancel";
 
 export const router = createBrowserRouter([
     {
@@ -33,6 +35,14 @@ export const router = createBrowserRouter([
                 element: <PrivateRoute>
                     <BePremium></BePremium>
                 </PrivateRoute>
+            },
+            {
+                path: '/payment/success',
+                Component: Success
+            },
+            {
+                path: '/payment/cancel',
+                Component: Cancel
             },
             {
                 path: '/dashboard',

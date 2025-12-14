@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
+import { Link } from 'react-router';
 
 const AddLesson = () => {
 
@@ -158,7 +159,7 @@ const AddLesson = () => {
                             {/* Image Preview - Show this when image is uploaded */}
                             {/* <div className="relative w-full h-48 rounded-lg overflow-hidden border-2 border-slate-300">
                                 <img
-                                    src="YOUR_IMAGE_URL"
+                                    src="img_url"
                                     alt="Preview"
                                     className="w-full h-full object-cover"
                                 />
@@ -193,29 +194,32 @@ const AddLesson = () => {
                             </label>
                             <div className="relative">
                                 <select
-                                    name="accessLevel"
-                                    disabled
+                                    name="accessLevel" {...register('lessonAccess')}
+
                                     className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white cursor-not-allowed opacity-60"
                                 >
-                                    <option value="free">Free - Available to all users</option>
-                                    <option value="premium">Premium - Only for premium members</option>
+                                    {
+                                        user.isPremium === true ? <>
+                                            <option value="premium">Premium - Only for premium members</option></> : <option value="free">Free - Available to all users</option>
+                                    }
+
                                 </select>
 
                                 {/* Tooltip on hover */}
-                                <div className="absolute inset-0 cursor-not-allowed group">
+                                {/* <div className="absolute inset-0 cursor-not-allowed group">
                                     <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block w-full">
                                         <div className="bg-slate-900 text-white text-xs rounded-lg py-2 px-3 shadow-lg">
                                             Upgrade to Premium to create paid lessons
                                             <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-900"></div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
 
                             {/* Warning message for free users */}
                             <p className="mt-2 text-sm text-amber-600 flex items-center gap-1">
                                 <AlertCircle size={14} />
-                                Upgrade to Premium to unlock paid lesson creation
+                                Upgrade to Premium to unlock paid lesson creation. <Link to='/be-premium' className='underline font-bold text-blue-600'>Be Premium now</Link>
                             </p>
                         </div>
 

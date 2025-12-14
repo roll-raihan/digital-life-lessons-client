@@ -3,15 +3,13 @@ import { Check, X, Crown, Sparkles, Zap, Star } from 'lucide-react';
 import useAuth from '../../hooks/useAuth';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
-import { useForm } from 'react-hook-form';
 
 const BePremium = () => {
 
     const axiosSecure = useAxiosSecure();
     const { user } = useAuth();
-    const { handleSubmit } = useForm();
 
-    const handlePayment = (data) => {
+    const handlePayment = () => {
         const cost = 1500;
         console.log(cost);
         Swal.fire({
@@ -25,13 +23,31 @@ const BePremium = () => {
         }).then((result) => {
             if (result.isConfirmed) {
 
-                axiosSecure.post('/create-checkout-session', data)
+                const paymentData = {
+                    paymentInfo: {
+                        email: user.email 
+                    },
+                    userID: user.uid
+                };
+
+                axiosSecure.post('/create-checkout-session', paymentData)
                     .then(res => {
                         console.log('after saving premium', res.data)
+                        if (res.data.url) {
+                            window.location.href = res.data.url;
+                        }
                     })
                     .catch(err => {
-                        console.log('Error: ', err);
-                    })
+                        // console.error('Full Error Object:', err);
+                        // console.error('Error Response:', err.response?.data);
+                        // console.error('Error Status:', err.response?.status);
+
+                        Swal.fire({
+                            title: "Error!",
+                            text: err.response?.data?.error || "Failed to create checkout session",
+                            icon: "error"
+                        });
+                    });
 
                 // Swal.fire({
                 //     title: "Yahooo!",
@@ -189,7 +205,7 @@ const BePremium = () => {
                             </li>
                         </ul>
 
-                        <button type='submit' onClick={handleSubmit(handlePayment)} className="w-full py-4 px-6 rounded-lg bg-white text-indigo-600 font-bold text-lg hover:bg-indigo-50 transition-colors shadow-lg flex items-center justify-center gap-2">
+                        <button type='submit' onClick={handlePayment} className="w-full py-4 px-6 rounded-lg bg-white text-indigo-600 font-bold text-lg hover:bg-indigo-50 transition-colors shadow-lg flex items-center justify-center gap-2">
                             <Zap className="w-5 h-5" />
                             Upgrade to Premium
                         </button>
