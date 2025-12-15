@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query'
 import useAuth from '../../hooks/useAuth';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { Eye, EyeOff, Lock, Unlock, Info, Heart, Bookmark, Calendar, Edit, Trash2 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import { Link, useNavigate } from 'react-router';
+import EditLessonModal from './EditLessonModal';
 
 const MyLessons = () => {
 
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
+    const [editingLessonId, setEditingLessonId] = useState(null);
     const { data: lessons = [], refetch } = useQuery({
         queryKey: ['my-lessons', user?.email],
         queryFn: async () => {
@@ -55,38 +57,9 @@ const MyLessons = () => {
         });
     }
 
-    const handleEditLesson = id => {
-        console.log(id)
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You want to edit this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, edit !"
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                axiosSecure.patch(`/lessons/${id}`) // request problem. todo: explore and change
-                    .then(res => {
-                        if (res.data.modifiedCount) {
-                            refetch();
-                            Swal.fire({
-                                title: "Edited!",
-                                text: "Your file has been edited.",
-                                icon: "success"
-                            });
-                        }
-                    })
-                    .catch(err => {
-                        console.error("PATCH error:", err);
-                        Swal.fire("Error", "Failed to update lesson", "error");
-                    });
-
-            }
-        });
-    }
+    const handleEditLesson = (id) => {
+        setEditingLessonId(id);
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
@@ -187,9 +160,6 @@ const MyLessons = () => {
                                                 <h3 className="text-sm font-semibold text-slate-800 mb-1">
                                                     {lesson.lessonTitle}
                                                 </h3>
-                                                {/* <p className="text-xs text-slate-600 line-clamp-2">
-                                                    {lesson.description}
-                                                </p> */}
                                             </div>
                                         </td>
 
@@ -298,6 +268,15 @@ const MyLessons = () => {
                     </div>
                 )}
             </div>
+            {
+                editingLessonId && (
+                    <EditLessonModal
+                        lessonId={editingLessonId}
+                        onClose={() => setEditingLessonId(null)}
+                        refetch={refetch}
+                    />
+                )
+            }
         </div>
     );
 };
