@@ -1,12 +1,81 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { CheckCircle, ArrowRight } from 'lucide-react';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import useAuth from '../../hooks/useAuth';
+import Loading from '../../components/shared/Loading';
+import Swal from 'sweetalert2';
 
 const Success = () => {
+
+    const [searchParams] = useSearchParams();
+    const sessionId = searchParams.get('session_id');
+    const axiosSecure = useAxiosSecure();
+    const { loading } = useAuth();
+    const navigate = useNavigate();
+
+    // useEffect(() => {
+    //     if (sessionId) {
+    //         axiosSecure.patch(`/payment-success?session_id=${sessionId}`)
+    //             .then(res => {
+    //                 console.log(res.data)
+    //             })
+    //     }
+    // }, [sessionId, axiosSecure])
+
+    useEffect(() => {
+        if (sessionId) {
+            console.log('Session ID from URL:', sessionId);
+
+            axiosSecure.patch(`/payment-success?session_id=${sessionId}`)
+                .then(res => {
+                    console.log('🟢 Full Response:', res); // See full response
+                    console.log('🟢 Response Data:', res.data);
+                    console.log('🟢 Success status:', res.data.success);
+                    // console.log('Payment verification:', res.data);
+
+                    if (res.data.success) {
+                        // setVerified(true);
+                        Swal.fire({
+                            title: "Yahooo!",
+                            text: "You are a premium user now.",
+                            icon: "success",
+                            timer: 3000
+                        }).then(() => {
+                            // Redirect to dashboard or home
+                            navigate('/dashboard'); // Or wherever you want
+                        });
+                    } else {
+                        console.log('🔴 Verification failed:', res.data.error);
+                        Swal.fire({
+                            title: "Verification Failed",
+                            text: res.data.error || "Unable to verify payment",
+                            icon: "error"
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error('🔴 Error Object:', err);
+                    console.error('🔴 Error Response:', err.response?.data);
+                    console.error('🔴 Error Status:', err.response?.status);
+                    // console.error('Error verifying payment:', err);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Failed to verify payment. Please contact support.",
+                        icon: "error"
+                    });
+                });
+        }
+    }, [sessionId, axiosSecure, navigate]);
+
+    if (loading) {
+        return <Loading></Loading>
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 to-sky-50 p-6">
-            <motion
+            <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4 }}
@@ -46,7 +115,7 @@ const Success = () => {
                 <p className="mt-4 text-xs text-gray-400">
                     A confirmation has been sent to your email.
                 </p>
-            </motion>
+            </motion.div>
         </div>
     );
 };
