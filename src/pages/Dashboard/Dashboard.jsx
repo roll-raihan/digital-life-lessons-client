@@ -1,6 +1,6 @@
 import React from 'react';
 import { IoIosAddCircle } from 'react-icons/io';
-import { MdPlayLesson } from 'react-icons/md';
+import { MdFavorite, MdPlayLesson } from 'react-icons/md';
 import { Link, Outlet } from 'react-router';
 
 const Dashboard = () => {
@@ -45,6 +45,14 @@ const Dashboard = () => {
                             <Link to='/dashboard/my-lessons' className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Lessons">
                                 <MdPlayLesson />
                                 <span className="is-drawer-close:hidden">My Lessons</span>
+                            </Link>
+                        </li>
+
+                        {/* favorite lessons */}
+                        <li>
+                            <Link to='/dashboard/my-favorites' className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Favorites">
+                                <MdFavorite />
+                                <span className="is-drawer-close:hidden">My Favorites</span>
                             </Link>
                         </li>
 

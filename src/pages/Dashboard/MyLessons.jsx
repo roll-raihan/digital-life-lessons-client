@@ -4,11 +4,13 @@ import useAuth from '../../hooks/useAuth';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { Eye, EyeOff, Lock, Unlock, Info, Heart, Bookmark, Calendar, Edit, Trash2 } from 'lucide-react';
 import Swal from 'sweetalert2';
+import { Link, useNavigate } from 'react-router';
 
 const MyLessons = () => {
 
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
     const { data: lessons = [], refetch } = useQuery({
         queryKey: ['my-lessons', user?.email],
         queryFn: async () => {
@@ -18,6 +20,10 @@ const MyLessons = () => {
     })
 
     const isPremiumUser = true;
+
+    const handleDetailsLesson = (id) => {
+        navigate(`/dashboard/my-lessons/${id}`);
+    }
 
     const handleLessonDelete = id => {
         // console.log(id)
@@ -258,7 +264,7 @@ const MyLessons = () => {
                                         {/* Actions */}
                                         <td className="px-6 py-4">
                                             <div className="flex items-center justify-center gap-2">
-                                                <button className="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
+                                                <button onClick={() => handleDetailsLesson(lesson._id)} className="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
                                                     <Info className="w-4 h-4" />
                                                 </button>
                                                 <button onClick={() => handleEditLesson(lesson._id)} className="p-2 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 transition-colors">
@@ -285,9 +291,9 @@ const MyLessons = () => {
                             </div>
                             <h3 className="text-lg font-semibold text-slate-800 mb-2">No lessons yet</h3>
                             <p className="text-slate-600 mb-6">Create your first lesson to get started</p>
-                            <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            <Link to='/dashboard/add-lessons' className="btn px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                                 Create Lesson
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 )}

@@ -11,6 +11,8 @@ import AddLessons from "../pages/Dashboard/AddLessons";
 import BePremium from "../pages/BePremium/BePremium";
 import Success from "../pages/payment/Success";
 import Cancel from "../pages/payment/Cancel";
+import MyFavoritesLessons from "../pages/Dashboard/MyFavoritesLessons";
+import MyLessonsDetails from "../pages/Dashboard/MyLessonsDetails";
 
 export const router = createBrowserRouter([
     {
@@ -55,9 +57,17 @@ export const router = createBrowserRouter([
                         Component: MyLessons
                     },
                     {
+                        path: '/dashboard/my-lessons/:id',
+                        Component:MyLessonsDetails
+                    },
+                    {
                         path: '/dashboard/add-lessons',
                         Component: AddLessons
-                    }
+                    },
+                    {
+                        path: '/dashboard/my-favorites',
+                        Component: MyFavoritesLessons
+                    },
                 ]
             }
         ]
