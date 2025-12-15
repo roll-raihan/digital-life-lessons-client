@@ -29,7 +29,7 @@ const AuthProvider = ({ children }) => {
         setLoading(true)
         return signOut(auth);
     }
-
+    console.log(user)
     const updateUserProfile = (profile) => {
         return updateProfile(auth.currentUser, profile)
     }

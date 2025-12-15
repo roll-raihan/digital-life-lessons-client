@@ -5,14 +5,15 @@ import useAuth from '../../hooks/useAuth';
 import { toast, ToastContainer } from 'react-toastify';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const Register = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
     const { registerUser, signInWithGoogle, updateUserProfile } = useAuth();
-    const { register,
-        handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const axiosSecure = useAxiosSecure();
 
     const handleRegister = (data) => {
         // console.log('output of register', data);
@@ -25,11 +26,24 @@ const Register = () => {
                 const image_URL_API = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`;
                 axios.post(image_URL_API, formData)
                     .then(res => {
-                        // console.log('after image upload', res.data.data.url);
+                        const photoURL = res.data.data.url;
+
+                        // create user in db
+                        const userInfo = {
+                            displayName: data.name,
+                            photoURL: photoURL,
+                            email: data.email
+                        }
+                        axiosSecure.post('/users', userInfo)
+                            .then(res => {
+                                if (res.data.insertedId) {
+                                    console.log('user created in the db')
+                                }
+                            })
 
                         const updateProfile = {
                             displayName: data.name,
-                            photoURL: res.data.data.url
+                            photoURL: photoURL
                         }
 
                         updateUserProfile(updateProfile)
@@ -55,7 +69,21 @@ const Register = () => {
 
     const handleGoogleSignIn = () => {
         signInWithGoogle()
-            .then(() => {
+            .then((data) => {
+
+                // create user in db
+                const userInfo = {
+                    displayName: data.user.displayName,
+                    photoURL: data.user.photoURL,
+                    email: data.user.email
+                }
+                axiosSecure.post('/users', userInfo)
+                    .then(res => {
+                        if (res.data.insertedId) {
+                            console.log('user created in the db')
+                        }
+                    })
+
                 Swal.fire({
                     title: "Successfully registered!",
                     icon: "success",
