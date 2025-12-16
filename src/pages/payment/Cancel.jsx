@@ -1,6 +1,7 @@
 import React from 'react';
 import { XCircle, RefreshCcw, Home } from 'lucide-react';
 import { Link } from 'react-router';
+import { motion } from 'framer-motion';
 
 const Cancel = () => {
     return (

@@ -5,6 +5,7 @@ import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAuth from '../../hooks/useAuth';
 import Loading from '../../components/shared/Loading';
 import Swal from 'sweetalert2';
+import { motion } from 'framer-motion';
 
 const Success = () => {
 
