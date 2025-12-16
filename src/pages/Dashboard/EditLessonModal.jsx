@@ -33,7 +33,7 @@ const EditLessonModal = ({ lessonId, onClose, refetch }) => {
         if (lesson) {
             setFormData({
                 lessonTitle: lesson.lessonTitle || '',
-                description: lesson.description || '',
+                description: lesson.lessonDescription || '',
                 lessonPrivacy: lesson.lessonPrivacy || 'private',
                 accessLevel: lesson.accessLevel || 'free'
             });

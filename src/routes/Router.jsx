@@ -14,6 +14,7 @@ import Cancel from "../pages/payment/Cancel";
 import MyFavoritesLessons from "../pages/Dashboard/MyFavoritesLessons";
 import MyLessonsDetails from "../pages/Dashboard/MyLessonsDetails";
 import PublicLessons from "../pages/PublicLessons/PublicLessons";
+import LessonDetails from "../pages/Dashboard/Details/LessonDetails";
 
 export const router = createBrowserRouter([
     {
@@ -36,6 +37,12 @@ export const router = createBrowserRouter([
             {
                 path: '/public-lessons',
                 Component: PublicLessons
+            },
+            {
+                path: '/public-lessons/:id',
+                element: <PrivateRoute>
+                    <LessonDetails></LessonDetails>
+                </PrivateRoute>
             },
             {
                 path: '/be-premium',

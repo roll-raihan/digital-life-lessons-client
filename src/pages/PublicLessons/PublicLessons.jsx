@@ -5,6 +5,7 @@ import Loading from '../../components/shared/Loading';
 import { motion } from "framer-motion";
 import { Lock } from "lucide-react";
 import useAuth from '../../hooks/useAuth';
+import { Link } from 'react-router';
 
 const PublicLessons = () => {
 
@@ -22,6 +23,10 @@ const PublicLessons = () => {
     if (isLoading) {
         return <Loading></Loading>
     }
+
+    // const handleDetails = id => {
+    //     console.log(id)
+    // }
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-10">
@@ -66,6 +71,11 @@ const PublicLessons = () => {
 
 
                                     <div className="flex items-center gap-3 mt-4">
+                                        <img
+                                            src={lesson?.creator?.photo}
+                                            alt={lesson?.creator?.name}
+                                            className="w-8 h-8 rounded-full"
+                                        />
                                         <div className="text-sm">
                                             <p className="font-medium">{lesson.email}</p>
                                             <p className="text-xs text-muted-foreground">
@@ -76,12 +86,13 @@ const PublicLessons = () => {
                                     </div>
 
 
-                                    <button
+                                    <Link to={`/public-lessons/${lesson._id}`}
+                                        // onClick={() => handleDetails(lesson._id)}
                                         className="btn w-full mt-4"
                                         disabled={isPremiumLocked}
                                     >
                                         See Details
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         </motion.div>
