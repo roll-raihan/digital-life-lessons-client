@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
@@ -15,39 +14,26 @@ const Success = () => {
     const { loading } = useAuth();
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     if (sessionId) {
-    //         axiosSecure.patch(`/payment-success?session_id=${sessionId}`)
-    //             .then(res => {
-    //                 console.log(res.data)
-    //             })
-    //     }
-    // }, [sessionId, axiosSecure])
-
     useEffect(() => {
         if (sessionId) {
             console.log('Session ID from URL:', sessionId);
 
             axiosSecure.patch(`/payment-success?session_id=${sessionId}`)
                 .then(res => {
-                    console.log('🟢 Full Response:', res); // See full response
-                    console.log('🟢 Response Data:', res.data);
-                    console.log('🟢 Success status:', res.data.success);
-                    // console.log('Payment verification:', res.data);
+                    console.log('Response Data:', res.data);
+                    console.log('Success status:', res.data.success);
 
                     if (res.data.success) {
-                        // setVerified(true);
                         Swal.fire({
                             title: "Yahooo!",
                             text: "You are a premium user now.",
                             icon: "success",
                             timer: 3000
                         }).then(() => {
-                            // Redirect to dashboard or home
-                            navigate('/dashboard'); // Or wherever you want
+                            navigate('/dashboard'); 
                         });
                     } else {
-                        console.log('🔴 Verification failed:', res.data.error);
+                        console.log('Verification failed:', res.data.error);
                         Swal.fire({
                             title: "Verification Failed",
                             text: res.data.error || "Unable to verify payment",
@@ -56,10 +42,9 @@ const Success = () => {
                     }
                 })
                 .catch(err => {
-                    console.error('🔴 Error Object:', err);
-                    console.error('🔴 Error Response:', err.response?.data);
-                    console.error('🔴 Error Status:', err.response?.status);
-                    // console.error('Error verifying payment:', err);
+                    console.error('Error Object:', err);
+                    console.error('Error Response:', err.response?.data);
+                    console.error('Error Status:', err.response?.status);
                     Swal.fire({
                         title: "Error!",
                         text: "Failed to verify payment. Please contact support.",

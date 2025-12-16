@@ -90,12 +90,12 @@ const EditLessonModal = ({ lessonId, onClose, refetch }) => {
                     {/* Read-only user info */}
                     <div className="grid grid-cols-2 gap-4">
                         <input
-                            value={lesson.userName}
+                            value={user.displayName}
                             disabled
                             className="input input-bordered w-full bg-slate-100"
                         />
                         <input
-                            value={lesson.email}
+                            value={user.email}
                             disabled
                             className="input input-bordered w-full bg-slate-100"
                         />
@@ -118,7 +118,7 @@ const EditLessonModal = ({ lessonId, onClose, refetch }) => {
                         <label className="label">Description</label>
                         <textarea
                             name="description"
-                            value={formData.description}
+                            value={formData.lessonDescription}
                             onChange={handleChange}
                             className="textarea textarea-bordered w-full"
                         />
@@ -146,7 +146,7 @@ const EditLessonModal = ({ lessonId, onClose, refetch }) => {
                             <label className="label">Access Level</label>
                             <select
                                 name="accessLevel"
-                                value={formData.accessLevel}
+                                value={formData.lessonAccess}
                                 onChange={handleChange}
                                 disabled={!isPremiumUser}
                                 className={`select select-bordered w-full ${!isPremiumUser ? 'opacity-50 cursor-not-allowed' : ''
