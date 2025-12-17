@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 import Loading from '../../../components/shared/Loading';
@@ -89,23 +89,23 @@ const LessonDetails = ({ isPremiumLesson = false, isUserPremium = false }) => {
                     <div className="rounded-2xl border p-5">
                         <h3 className="font-semibold mb-4">📌 Lesson Info</h3>
                         <ul className="text-sm text-gray-600 space-y-2">
-                            <li>📅 Created: {lesson?.createdDate || 'Jan 12, 2025'}</li>
-                            <li>🕒 Updated: {lesson?.updateDate || 'Feb 2, 2025'}</li>
+                            <li>📅 Created: {lesson?.createdDate || '2025-12-12T17:50:34.870Z'}</li>
+                            <li>🕒 Updated: {lesson?.updatedDate || '2025-12-17T03:29:59.018Z'}</li>
                         </ul>
                     </div>
 
                     {/* Author Card */}
                     <div className="rounded-2xl border p-5 text-center">
                         <img
-                            src={lesson?.authorImage || 'https://placehold.co/100'}
+                            src={lesson?.creator?.photoURL || 'https://placehold.co/100'}
                             alt="Author"
                             className="w-20 h-20 rounded-full mx-auto mb-3"
                         />
-                        <h4 className="font-semibold">{lesson?.authorName || 'Author Name'}</h4>
+                        <h4 className="font-semibold">{lesson?.creator?.name || 'Author Name'}</h4>
                         <p className="text-sm text-gray-500 mb-3">2 Lessons Shared</p>
-                        <button className="px-4 py-2 rounded-xl border hover:bg-gray-50">
+                        <Link className="btn btn-active w-full px-4 py-2 rounded-xl border hover:bg-gray-50">
                             View all lessons
-                        </button>
+                        </Link>
                     </div>
 
                     {/* Stats */}

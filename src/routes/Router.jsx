@@ -15,6 +15,7 @@ import MyFavoritesLessons from "../pages/Dashboard/MyFavoritesLessons";
 import MyLessonsDetails from "../pages/Dashboard/MyLessonsDetails";
 import PublicLessons from "../pages/PublicLessons/PublicLessons";
 import LessonDetails from "../pages/Dashboard/Details/LessonDetails";
+import Profile from "../pages/Dashboard/Profile";
 
 export const router = createBrowserRouter([
     {
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
                         path: '/dashboard/my-favorites',
                         Component: MyFavoritesLessons
                     },
+                    {
+                        path: '/dashboard/profile',
+                        Component: Profile
+                    }
                 ]
             }
         ]

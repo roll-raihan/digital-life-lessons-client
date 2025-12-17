@@ -112,7 +112,7 @@ const Navbar = () => {
                                     <ul className="menu menu-sm p-2">
                                         <li>
                                             <Link
-                                                to="/profile"
+                                                to="/dashboard/profile"
                                                 onClick={() => setIsDropdownOpen(false)}
                                             >
                                                 👤 Profile
