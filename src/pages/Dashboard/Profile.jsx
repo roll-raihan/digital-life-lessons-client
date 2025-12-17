@@ -1,6 +1,39 @@
 import React from "react";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router";
+import Loading from "../../components/shared/Loading";
+import { MdWorkspacePremium } from "react-icons/md";
 
 const Profile = () => {
+
+    const { id } = useParams();
+    const axiosSecure = useAxiosSecure();
+    const { user } = useAuth();
+    const { data: userData = {}, isLoading: userLoading } = useQuery({
+        queryKey: ['user-profile'],
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/users/${id}`)
+            return res.data
+        }
+    });
+
+    const { data: lessons = [], isLoading: lessonsLoading } = useQuery({
+        queryKey: ["my-public-lessons", user?.email],
+        enabled: !!user?.email,
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/lessons/user/public?email=${user?.email}`)
+            return res.data.data;
+        },
+    });
+
+    if (userLoading || lessonsLoading) {
+        return <Loading />;
+    }
+
+    const isPremium = userData?.isPremium === true;
+
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
             {/* ================= Profile Header ================= */}
@@ -9,7 +42,7 @@ const Profile = () => {
                     {/* Profile Photo */}
                     <div className="relative">
                         <img
-                            src="https://i.ibb.co/7QpKsCX/avatar.png"
+                            src={userData?.photoURL || "https://i.ibb.co/7QpKsCX/avatar.png"}
                             alt="Profile"
                             className="w-28 h-28 rounded-full object-cover border-4 border-indigo-500"
                         />
@@ -21,18 +54,19 @@ const Profile = () => {
                     {/* User Info */}
                     <div className="flex-1 space-y-2">
                         <div className="flex items-center gap-3">
-                            <h2 className="text-2xl font-bold text-gray-800">
-                                Raihan Ahmed
-                            </h2>
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-800">
+                                    {lessons?.creator?.name || 'Creator Name'}
+                                </h2>
+                                <p className="text-gray-500">
+                                    {lessons?.creator?.email || 'Creator Email'}
+                                </p>
+                            </div>
                             {/* Premium Badge */}
                             <span className="bg-yellow-100 text-yellow-700 text-sm font-semibold px-3 py-1 rounded-full">
-                                Premium ⭐
+                                {isPremium ? <p> Premium ⭐</p> : <p>Not premium user</p>}
                             </span>
                         </div>
-
-                        <p className="text-gray-500">
-                            raihan@gmail.com
-                        </p>
 
                         {/* Edit Name */}
                         <div className="flex gap-3 mt-3">
@@ -51,22 +85,24 @@ const Profile = () => {
                 {/* ================= Stats ================= */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
                     <div className="bg-gray-50 rounded-xl p-4 text-center">
-                        <p className="text-2xl font-bold text-indigo-600">12</p>
+                        <p className="text-2xl font-bold text-indigo-600">{lessons?.length || '0'}</p>
                         <p className="text-gray-500 text-sm">Lessons Created</p>
                     </div>
 
                     <div className="bg-gray-50 rounded-xl p-4 text-center">
-                        <p className="text-2xl font-bold text-indigo-600">8</p>
+                        <p className="text-2xl font-bold text-indigo-600">{lessons?.saves || '0'}</p>
                         <p className="text-gray-500 text-sm">Lessons Saved</p>
                     </div>
 
                     <div className="bg-gray-50 rounded-xl p-4 text-center">
-                        <p className="text-2xl font-bold text-indigo-600">Public</p>
+                        <p className="text-2xl font-bold text-indigo-600">{userData?.isPremium ? 'Premium' : 'Public'}</p>
                         <p className="text-gray-500 text-sm">Account Type</p>
                     </div>
 
                     <div className="bg-gray-50 rounded-xl p-4 text-center">
-                        <p className="text-2xl font-bold text-indigo-600">⭐</p>
+                        <p className="text-2xl font-bold text-indigo-600">
+                            {userData?.isPremium ? <MdWorkspacePremium /> : 'Not Premium'}
+                        </p>
                         <p className="text-gray-500 text-sm">Premium Status</p>
                     </div>
                 </div>
@@ -81,34 +117,21 @@ const Profile = () => {
                 {/* Lessons Grid */}
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {/* Lesson Card */}
-                    {[1, 2, 3, 4, 5, 6].map((lesson) => (
+                    {lessons.map((lesson) => (
                         <div
-                            key={lesson}
+                            key={lesson?._id}
                             className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden"
                         >
-                            <img
-                                src="https://i.ibb.co/SV6n4mK/lesson.jpg"
-                                alt="Lesson"
-                                className="w-full h-40 object-cover"
-                            />
-
                             <div className="p-5 space-y-3">
                                 <h4 className="font-semibold text-lg text-gray-800 line-clamp-2">
-                                    Life Lesson Title Goes Here
+                                    {lesson?.lessonTitle}
                                 </h4>
 
-                                <p className="text-gray-500 text-sm line-clamp-2">
-                                    Short description of the lesson. This is only UI content.
+                                <p className="text-sm text-muted-foreground line-clamp-2">
+                                    {lesson?.lessonDescription}
                                 </p>
-
-                                <div className="flex items-center justify-between pt-3">
-                                    <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full">
-                                        Public
-                                    </span>
-
-                                    <span className="text-xs text-gray-400">
-                                        Newest
-                                    </span>
+                                <div className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full">
+                                    {lesson?.lessonAccess}
                                 </div>
                             </div>
                         </div>
