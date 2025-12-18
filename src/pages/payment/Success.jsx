@@ -17,22 +17,16 @@ const Success = () => {
 
     useEffect(() => {
         if (sessionId) {
-            console.log('Session ID from URL:', sessionId);
 
             axiosSecure.patch(`/payment-success?session_id=${sessionId}`)
                 .then(res => {
-                    console.log('Response Data:', res.data);
-                    console.log('Success status:', res.data.success);
-
-                    if (res.data.success) {
+                    if (res.data.modifiedCount) {
                         Swal.fire({
                             title: "Yahooo!",
                             text: "You are a premium user now.",
                             icon: "success",
                             timer: 3000
-                        }).then(() => {
-                            navigate('/dashboard'); 
-                        });
+                        })
                     } else {
                         console.log('Verification failed:', res.data.error);
                         Swal.fire({
@@ -53,7 +47,7 @@ const Success = () => {
                     });
                 });
         }
-    }, [sessionId, axiosSecure, navigate]);
+    }, [sessionId, axiosSecure]);
 
     if (loading) {
         return <Loading></Loading>

@@ -13,7 +13,7 @@ const PublicLessons = () => {
     const { user } = useAuth();
     const isPremiumUser = false;
     const { data: lessons = [], isLoading } = useQuery({
-        queryKey: ['public-lessons'],
+        queryKey: ['public-lessons', user?.email],
         queryFn: async () => {
             const res = await axiosSecure.get('/lessons')
             return res.data;

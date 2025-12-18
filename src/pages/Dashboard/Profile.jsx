@@ -56,10 +56,10 @@ const Profile = () => {
                         <div className="flex items-center gap-3">
                             <div>
                                 <h2 className="text-2xl font-bold text-gray-800">
-                                    {lessons?.creator?.name || 'Creator Name'}
+                                    {userData?.displayName || 'Creator Name'}
                                 </h2>
                                 <p className="text-gray-500">
-                                    {lessons?.creator?.email || 'Creator Email'}
+                                    {userData?.email || 'Creator Email'}
                                 </p>
                             </div>
                             {/* Premium Badge */}

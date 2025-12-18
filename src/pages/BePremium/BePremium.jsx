@@ -10,8 +10,6 @@ const BePremium = () => {
     const { user } = useAuth();
 
     const handlePayment = () => {
-        const cost = 1500;
-        console.log(cost);
         Swal.fire({
             title: "Are you sure?",
             text: "You will be charged 1500Tk !",
@@ -25,23 +23,20 @@ const BePremium = () => {
 
                 const paymentData = {
                     paymentInfo: {
-                        email: user.email 
+                        email: user.email,
+                        userId: user.uid
                     },
-                    userID: user.uid
+
                 };
 
                 axiosSecure.post('/create-checkout-session', paymentData)
                     .then(res => {
-                        console.log('after saving premium', res.data)
+                        // console.log('after saving premium', res.data)
                         if (res.data.url) {
                             window.location.href = res.data.url;
                         }
                     })
                     .catch(err => {
-                        // console.error('Full Error Object:', err);
-                        // console.error('Error Response:', err.response?.data);
-                        // console.error('Error Status:', err.response?.status);
-
                         Swal.fire({
                             title: "Error!",
                             text: err.response?.data?.error || "Failed to create checkout session",

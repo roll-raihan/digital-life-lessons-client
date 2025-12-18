@@ -52,11 +52,11 @@ export const router = createBrowserRouter([
                 </PrivateRoute>
             },
             {
-                path: '/payment/success',
+                path: '/payment-success',
                 Component: Success
             },
             {
-                path: '/payment/cancel',
+                path: '/payment-cancel',
                 Component: Cancel
             },
             {
