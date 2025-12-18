@@ -24,15 +24,15 @@ const ManageUsers = () => {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: "Yes, make admin!"
         }).then((result) => {
             if (result.isConfirmed) {
                 axiosSecure.patch(`/users/${email}`)
                     .then(() => {
                         refetch();
                         Swal.fire({
-                            title: "Deleted!",
-                            text: "Your file has been deleted.",
+                            title: "Modified!",
+                            text: "Your file has been modified.",
                             icon: "success"
                         })
                     }).catch(err => {
