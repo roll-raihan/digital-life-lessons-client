@@ -17,6 +17,9 @@ import PublicLessons from "../pages/PublicLessons/PublicLessons";
 import LessonDetails from "../pages/Dashboard/Details/LessonDetails";
 import Profile from "../pages/Dashboard/Profile";
 import DashboardHome from "../pages/Dashboard/DashboardHome";
+import AdminDashboard from "../pages/Dashboard/AdminDashboard";
+import AdminRoute from "./AdminRoute";
+import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 
 export const router = createBrowserRouter([
     {
@@ -69,6 +72,18 @@ export const router = createBrowserRouter([
                     {
                         index: true,
                         Component: DashboardHome
+                    },
+                    {
+                        path: '/dashboard/admin',
+                        element: <AdminRoute>
+                            <AdminDashboard></AdminDashboard>
+                        </AdminRoute>,
+                        children: [
+                            {
+                                path: '/dashboard/admin/manage-users',
+                                Component: ManageUsers
+                            }
+                        ]
                     },
                     {
                         path: '/dashboard/my-lessons',

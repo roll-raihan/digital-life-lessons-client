@@ -2,19 +2,17 @@ import React from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
 import Loading from "../../components/shared/Loading";
 import { MdWorkspacePremium } from "react-icons/md";
 
 const Profile = () => {
 
-    const { id } = useParams();
     const axiosSecure = useAxiosSecure();
     const { user } = useAuth();
-    const { data: userData = {}, isLoading: userLoading } = useQuery({
-        queryKey: ['user-profile'],
+    const { data: userData = [], isLoading: userLoading } = useQuery({
+        queryKey: ['isPremium', user?.email],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/users/${id}`)
+            const res = await axiosSecure.get(`/users/${user?.email}/isPremium`)
             return res.data
         }
     });
@@ -31,9 +29,6 @@ const Profile = () => {
     if (userLoading || lessonsLoading) {
         return <Loading />;
     }
-
-    const isPremium = userData?.isPremium === true;
-    console.log('...premium',isPremium)
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
@@ -65,7 +60,7 @@ const Profile = () => {
                             </div>
                             {/* Premium Badge */}
                             <span className="bg-yellow-100 text-yellow-700 text-sm font-semibold px-3 py-1 rounded-full">
-                                {isPremium ? <p> Premium ⭐</p> : <p>Not premium user</p>}
+                                {userData?.isPremium ? <p> Premium ⭐</p> : <p>Not premium user</p>}
                             </span>
                         </div>
 
@@ -102,7 +97,7 @@ const Profile = () => {
 
                     <div className="bg-gray-50 rounded-xl p-4 text-center">
                         <p className="text-2xl font-bold text-indigo-600">
-                            {userData?.isPremium ? <MdWorkspacePremium /> : 'Not Premium'}
+                            {userData?.isPremium ? <MdWorkspacePremium className="mx-auto"/> : 'Not Premium'}
                         </p>
                         <p className="text-gray-500 text-sm">Premium Status</p>
                     </div>
