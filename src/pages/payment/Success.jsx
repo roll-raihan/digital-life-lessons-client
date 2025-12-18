@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAuth from '../../hooks/useAuth';
@@ -13,7 +13,6 @@ const Success = () => {
     const sessionId = searchParams.get('session_id');
     const axiosSecure = useAxiosSecure();
     const { loading } = useAuth();
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (sessionId) {

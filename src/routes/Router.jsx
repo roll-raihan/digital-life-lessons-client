@@ -16,6 +16,7 @@ import MyLessonsDetails from "../pages/Dashboard/MyLessonsDetails";
 import PublicLessons from "../pages/PublicLessons/PublicLessons";
 import LessonDetails from "../pages/Dashboard/Details/LessonDetails";
 import Profile from "../pages/Dashboard/Profile";
+import DashboardHome from "../pages/Dashboard/DashboardHome";
 
 export const router = createBrowserRouter([
     {
@@ -65,6 +66,10 @@ export const router = createBrowserRouter([
                     <Dashboard></Dashboard>
                 </PrivateRoute>,
                 children: [
+                    {
+                        index: true,
+                        Component: DashboardHome
+                    },
                     {
                         path: '/dashboard/my-lessons',
                         Component: MyLessons
