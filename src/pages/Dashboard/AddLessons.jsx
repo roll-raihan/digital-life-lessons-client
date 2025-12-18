@@ -5,6 +5,8 @@ import useAuth from '../../hooks/useAuth';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { Link } from 'react-router';
+import { useQuery } from '@tanstack/react-query';
+import Loading from '../../components/shared/Loading';
 
 const AddLesson = () => {
 
@@ -16,8 +18,18 @@ const AddLesson = () => {
     } = useForm();
     const { user } = useAuth();
 
+    const { data: userData = [], isLoading } = useQuery({
+        queryKey: ['isPremium', user?.email],
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/users/${user?.email}/isPremium`)
+            return res.data;
+        }
+    })
+
+    if (isLoading) return <Loading></Loading>
+
     const handleAddLessons = (data) => {
-        console.log(data);
+        // console.log(data);
         Swal.fire({
             title: "Are you sure?",
             text: "You want to add this lesson !",
@@ -96,7 +108,6 @@ const AddLesson = () => {
                                 className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
                                 placeholder="Share your experience, what you learned, and how it impacted you..."
                             />
-                            <p className="mt-2 text-sm text-slate-500">0 characters</p>
                         </div>
 
                         {/* Category Dropdown */}
@@ -182,8 +193,12 @@ const AddLesson = () => {
                                 name="privacy" {...register('lessonPrivacy', { required: true })}
                                 className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white cursor-pointer"
                             >
-                                <option value="public">Public - Anyone can see this lesson</option>
-                                <option value="private">Private - Only you can see this lesson</option>
+                                {
+                                    userData?.isPremium === true ? <>
+                                        <option value="public">Public - Anyone can see this lesson</option>
+                                        <option value="private">Private - Only you can see this lesson</option>
+                                    </> : <option value="public">Public - Anyone can see this lesson</option>
+                                }
                             </select>
                         </div>
 
@@ -199,21 +214,26 @@ const AddLesson = () => {
                                     className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white cursor-not-allowed opacity-60"
                                 >
                                     {
-                                        user.isPremium === true ? <>
-                                            <option value="premium">Premium - Only for premium members</option></> : <option value="free">Free - Available to all users</option>
+                                        userData?.isPremium === true ? <>
+                                            <option value="premium">Premium - Only for premium members</option>
+                                            <option value="free">Free - Available to all users</option>
+                                        </> : <option value="free">Free - Available to all users</option>
                                     }
 
                                 </select>
 
                                 {/* Tooltip on hover */}
-                                {/* <div className="absolute inset-0 cursor-not-allowed group">
-                                    <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block w-full">
-                                        <div className="bg-slate-900 text-white text-xs rounded-lg py-2 px-3 shadow-lg">
-                                            Upgrade to Premium to create paid lessons
-                                            <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-900"></div>
+                                {
+                                    userData?.isPremium === false &&
+                                    <div className="absolute inset-0 cursor-not-allowed group">
+                                        <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block w-full">
+                                            <div className="bg-slate-900 text-white text-xs rounded-lg py-2 px-3 shadow-lg">
+                                                Upgrade to Premium to create paid lessons
+                                                <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-900"></div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div> */}
+                                }
                             </div>
 
                             {/* Warning message for free users */}

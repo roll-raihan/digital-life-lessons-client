@@ -11,8 +11,16 @@ const PublicLessons = () => {
 
     const axiosSecure = useAxiosSecure();
     const { user } = useAuth();
-    const isPremiumUser = false;
-    const { data: lessons = [], isLoading } = useQuery({
+
+    const { data: userData = [], isLoading: userLoading } = useQuery({
+        queryKey: ['isPremium', user?.email],
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/users/${user?.email}/isPremium`)
+            return res.data;
+        }
+    })
+
+    const { data: lessons = [], isLoading: lessonLoading } = useQuery({
         queryKey: ['public-lessons', user?.email],
         queryFn: async () => {
             const res = await axiosSecure.get('/lessons')
@@ -20,7 +28,7 @@ const PublicLessons = () => {
         }
     })
 
-    if (isLoading) {
+    if (userLoading || lessonLoading) {
         return <Loading></Loading>
     }
 
@@ -33,8 +41,7 @@ const PublicLessons = () => {
             <h1 className="text-3xl font-bold mb-8">🌍 Public Life Lessons</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {lessons.map(lesson => {
-                    const isPremiumLocked = lesson.accessLevel === "premium" && !isPremiumUser;
-
+                    const isPremiumLocked = lesson.lessonAccess === "premium" && !userData?.isPremium;
 
                     return (
                         <motion.div
@@ -50,7 +57,7 @@ const PublicLessons = () => {
                                         <Lock className="w-10 h-10 mb-3" />
                                         <p className="font-semibold">Premium Lesson</p>
                                         <p className="text-sm mb-3">Upgrade to view full content</p>
-                                        <button variant="secondary" size="sm">Upgrade</button>
+                                        <Link to='/be-premium' className='btn' variant="secondary" size="sm">Upgrade</Link>
                                     </div>
                                 )}
 

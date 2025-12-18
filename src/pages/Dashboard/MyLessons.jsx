@@ -88,7 +88,7 @@ const MyLessons = () => {
                             <div>
                                 <p className="text-sm text-slate-600 mb-1">Total Reactions</p>
                                 <p className="text-2xl font-bold text-slate-800">
-                                    {lessons.reduce((sum, lesson) => sum + lesson.reactions, 0)}
+                                    {lessons?.reduce((sum, lesson) => sum + lesson.reactions, 0) || '0'}
                                 </p>
                             </div>
                             <div className="bg-red-100 p-3 rounded-lg">
@@ -101,7 +101,7 @@ const MyLessons = () => {
                             <div>
                                 <p className="text-sm text-slate-600 mb-1">Total Saves</p>
                                 <p className="text-2xl font-bold text-slate-800">
-                                    {lessons.reduce((sum, lesson) => sum + lesson.saves, 0)}
+                                    {lessons?.reduce((sum, lesson) => sum + lesson.saves, 0) || '0'}
                                 </p>
                             </div>
                             <div className="bg-amber-100 p-3 rounded-lg">
@@ -170,7 +170,7 @@ const MyLessons = () => {
                                                 ? 'bg-green-100 text-green-700 hover:bg-green-200'
                                                 : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
                                                 }`}>
-                                                {lesson.visibility === 'public' ? (
+                                                {lesson.lessonPrivacy === 'public' ? (
                                                     <>
                                                         <Eye className="w-3.5 h-3.5" />
                                                         Public
@@ -187,13 +187,13 @@ const MyLessons = () => {
                                         {/* Access Level Toggle */}
                                         <td className="px-6 py-4">
                                             <button
-                                                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${lesson.accessLevel === 'premium'
+                                                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${lesson.lessonAccess === 'premium'
                                                     ? 'bg-purple-100 text-purple-700 hover:bg-purple-200'
                                                     : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
                                                     } ${!isPremiumUser ? 'opacity-50 cursor-not-allowed' : ''}`}
                                                 disabled={!isPremiumUser}
                                             >
-                                                {lesson.accessLevel === 'premium' ? (
+                                                {lesson.lessonAccess === 'premium' ? (
                                                     <>
                                                         <Lock className="w-3.5 h-3.5" />
                                                         Premium
@@ -212,12 +212,12 @@ const MyLessons = () => {
                                             <div className="flex flex-col gap-2">
                                                 <div className="flex items-center gap-2 text-xs text-slate-600">
                                                     <Heart className="w-4 h-4 text-red-500" />
-                                                    <span className="font-medium">{lesson.reactions}</span>
+                                                    <span className="font-medium">{lesson?.reactions || '0'}</span>
                                                     <span className="text-slate-500">reactions</span>
                                                 </div>
                                                 <div className="flex items-center gap-2 text-xs text-slate-600">
                                                     <Bookmark className="w-4 h-4 text-amber-500" />
-                                                    <span className="font-medium">{lesson.saves}</span>
+                                                    <span className="font-medium">{lesson?.saves || '0'}</span>
                                                     <span className="text-slate-500">saves</span>
                                                 </div>
                                             </div>
