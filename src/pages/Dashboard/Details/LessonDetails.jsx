@@ -5,10 +5,6 @@ import { useQuery } from '@tanstack/react-query';
 import Loading from '../../../components/shared/Loading';
 import { Lock, Heart, Bookmark, Flag, Share2, Eye } from 'lucide-react';
 
-// **
-// if the lesson is premium and user is not premium. navigate to bePremium **
-// **
-
 const LessonDetails = ({ isPremiumLesson = false, isUserPremium = false }) => {
 
     const { id } = useParams();

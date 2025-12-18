@@ -1,14 +1,15 @@
 import React from 'react';
 import { IoIosAddCircle } from 'react-icons/io';
-import { MdAdminPanelSettings, MdFavorite, MdPlayLesson } from 'react-icons/md';
+import { MdAdminPanelSettings, MdFavorite, MdOutlineManageSearch, MdPlayLesson } from 'react-icons/md';
+import { GiCaptainHatProfile } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
 import { Link, Outlet } from 'react-router';
 import useRole from '../../hooks/useRole';
+import { FaUserShield } from 'react-icons/fa';
 
 const Dashboard = () => {
 
     const { role } = useRole();
-    console.log('role', role);
 
     return (
         <div className="drawer lg:drawer-open">
@@ -71,12 +72,36 @@ const Dashboard = () => {
                         </li>
 
                         {
-                            role === 'admin' && <>
+                            role?.role === 'admin' && <>
                                 {/* admin dashboard */}
                                 <li>
                                     <Link to='/dashboard/admin' className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Admin Dashboard">
                                         <MdAdminPanelSettings />
                                         <span className="is-drawer-close:hidden">Admin Dashboard</span>
+                                    </Link>
+                                </li>
+
+                                {/* manage users */}
+                                <li>
+                                    <Link to='/dashboard/admin/manage-users' className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Users">
+                                        <FaUserShield></FaUserShield>
+                                        <span className="is-drawer-close:hidden">Manage Users</span>
+                                    </Link>
+                                </li>
+                                
+                                {/* manage lessons */}
+                                <li>
+                                    <Link to='/dashboard/admin/manage-lessons' className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Lessons">
+                                        <MdOutlineManageSearch />
+                                        <span className="is-drawer-close:hidden">Manage Lessons</span>
+                                    </Link>
+                                </li>
+                                
+                                {/* admin profile */}
+                                <li>
+                                    <Link to='/dashboard/admin/profile' className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Admin Profile">
+                                        <GiCaptainHatProfile />
+                                        <span className="is-drawer-close:hidden">Admin Profile</span>
                                     </Link>
                                 </li>
                             </>

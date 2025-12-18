@@ -12,7 +12,7 @@ const AdminRoute = ({ children }) => {
         return <Loading></Loading>
     }
 
-    if (role !== 'admin') {
+    if (role?.role !== 'admin') {
         return <div className='min-h-screen flex justify-center items-center font-bold text-2xl'>Forbidden Access</div>
     }
 

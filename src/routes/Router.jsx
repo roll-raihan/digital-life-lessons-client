@@ -20,6 +20,8 @@ import DashboardHome from "../pages/Dashboard/DashboardHome";
 import AdminDashboard from "../pages/Dashboard/AdminDashboard";
 import AdminRoute from "./AdminRoute";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
+import ManageLessons from "../pages/Dashboard/Admin/ManageLessons";
+import AdminProfile from "../pages/Dashboard/Admin/AdminProfile";
 
 export const router = createBrowserRouter([
     {
@@ -82,6 +84,14 @@ export const router = createBrowserRouter([
                             {
                                 path: '/dashboard/admin/manage-users',
                                 Component: ManageUsers
+                            },
+                            {
+                                path: '/dashboard/admin/manage-lessons',
+                                Component: ManageLessons
+                            },
+                            {
+                                path: '/dashboard/admin/profile',
+                                Component: AdminProfile
                             }
                         ]
                     },
