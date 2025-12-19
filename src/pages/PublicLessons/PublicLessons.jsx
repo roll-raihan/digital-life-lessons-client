@@ -13,6 +13,9 @@ const PublicLessons = () => {
     const { user } = useAuth();
     const [searchText, setSearchText] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');
+    const [category, setCategory] = useState('');
+    const [emotion, setEmotion] = useState('');
+
 
     const { data: userData = [], isLoading: userLoading } = useQuery({
         queryKey: ['isPremium', user?.email],
@@ -31,9 +34,9 @@ const PublicLessons = () => {
     }, [searchText]);
 
     const { data: lessons = [], isLoading: lessonLoading } = useQuery({
-        queryKey: ['public-lessons', debouncedSearch],
+        queryKey: ['public-lessons', debouncedSearch, category, emotion],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/lessons?searchText=${debouncedSearch}`)
+            const res = await axiosSecure.get(`/lessons?searchText=${debouncedSearch}&category=${category}&emotion=${emotion}`)
             return res.data;
         }
     })
@@ -45,24 +48,56 @@ const PublicLessons = () => {
     return (
         <div className="max-w-7xl mx-auto px-4 py-10">
             <h1 className="text-3xl font-bold mb-8">🌍 Public Life Lessons</h1>
-            <p>Search: {searchText}</p>
-            <form onSubmit={(e) => e.preventDefault()}>
-                <label className="input mb-5">
-                    <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <g
-                            strokeLinejoin="round"
-                            strokeLinecap="round"
-                            strokeWidth="2.5"
-                            fill="none"
-                            stroke="currentColor"
-                        >
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.3-4.3"></path>
-                        </g>
-                    </svg>
-                    <input onChange={(e) => setSearchText(e.target.value)} type="search" placeholder="Search by Title" />
-                </label>
-            </form>
+
+            {/* search field for title */}
+            <label className="input mb-5">
+                <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <g
+                        strokeLinejoin="round"
+                        strokeLinecap="round"
+                        strokeWidth="2.5"
+                        fill="none"
+                        stroke="currentColor"
+                    >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </g>
+                </svg>
+                <input onChange={(e) => setSearchText(e.target.value)} type="search" placeholder="Search by Title" />
+            </label>
+
+            {/* filter option for category and emotion */}
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
+
+                {/* Category Filter */}
+                <select
+                    className="select select-bordered"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                >
+                    <option value="">All Categories</option>
+                    <option value="Personal Growth">Personal Growth</option>
+                    <option value="Career">Career</option>
+                    <option value="Relationships">Relationships</option>
+                    <option value="Mindset">Mindset</option>
+                    <option value="Mistakes Learned">Mistakes Learned</option>
+                </select>
+
+                {/* Emotion Filter */}
+                <select
+                    className="select select-bordered"
+                    value={emotion}
+                    onChange={(e) => setEmotion(e.target.value)}
+                >
+                    <option value="">All Emotions</option>
+                    <option value="Motivational">Motivational</option>
+                    <option value="Sad">Sad</option>
+                    <option value="Realization">Realization</option>
+                    <option value="Gratitude">Gratitude</option>
+                </select>
+
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {lessons.map(lesson => {
                     const isPremiumLocked = lesson.lessonAccess === "premium" && !userData?.isPremium;
