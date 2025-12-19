@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Camera, X, AlertCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
@@ -7,6 +7,7 @@ import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { Link } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import Loading from '../../components/shared/Loading';
+import Lottie from 'lottie-react';
 
 const AddLesson = () => {
 
@@ -14,9 +15,11 @@ const AddLesson = () => {
     const {
         register,
         handleSubmit,
+        reset,
         // formState: { errors }
     } = useForm();
     const { user } = useAuth();
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const { data: userData = [], isLoading } = useQuery({
         queryKey: ['isPremium', user?.email],
@@ -25,6 +28,106 @@ const AddLesson = () => {
             return res.data;
         }
     })
+
+    const successAnimation = {
+        "v": "5.7.4",
+        "fr": 60,
+        "ip": 0,
+        "op": 90,
+        "w": 500,
+        "h": 500,
+        "nm": "Success",
+        "ddd": 0,
+        "assets": [],
+        "layers": [
+            {
+                "ddd": 0,
+                "ind": 1,
+                "ty": 4,
+                "nm": "checkmark",
+                "sr": 1,
+                "ks": {
+                    "o": { "a": 0, "k": 100 },
+                    "r": { "a": 0, "k": 0 },
+                    "p": { "a": 0, "k": [250, 250, 0] },
+                    "a": { "a": 0, "k": [0, 0, 0] },
+                    "s": {
+                        "a": 1,
+                        "k": [
+                            { "i": { "x": [0.833], "y": [0.833] }, "o": { "x": [0.167], "y": [0.167] }, "t": 0, "s": [0, 0, 100] },
+                            { "t": 30, "s": [120, 120, 100] }
+                        ]
+                    }
+                },
+                "ao": 0,
+                "shapes": [
+                    {
+                        "ty": "gr",
+                        "it": [
+                            {
+                                "ind": 0,
+                                "ty": "sh",
+                                "ks": {
+                                    "a": 0,
+                                    "k": {
+                                        "i": [[0, 0], [0, 0], [0, 0]],
+                                        "o": [[0, 0], [0, 0], [0, 0]],
+                                        "v": [[-50, 0], [-20, 30], [50, -40]],
+                                        "c": false
+                                    }
+                                }
+                            },
+                            {
+                                "ty": "st",
+                                "c": { "a": 0, "k": [0.2, 0.8, 0.4, 1] },
+                                "o": { "a": 0, "k": 100 },
+                                "w": { "a": 0, "k": 12 },
+                                "lc": 2,
+                                "lj": 2
+                            },
+                            {
+                                "ty": "tr",
+                                "p": { "a": 0, "k": [0, 0] },
+                                "a": { "a": 0, "k": [0, 0] },
+                                "s": { "a": 0, "k": [100, 100] },
+                                "r": { "a": 0, "k": 0 },
+                                "o": { "a": 0, "k": 100 }
+                            }
+                        ]
+                    },
+                    {
+                        "ty": "gr",
+                        "it": [
+                            {
+                                "ty": "el",
+                                "p": { "a": 0, "k": [0, 0] },
+                                "s": { "a": 0, "k": [160, 160] }
+                            },
+                            {
+                                "ty": "st",
+                                "c": { "a": 0, "k": [0.2, 0.8, 0.4, 1] },
+                                "o": { "a": 0, "k": 100 },
+                                "w": { "a": 0, "k": 8 },
+                                "lc": 2,
+                                "lj": 2
+                            },
+                            {
+                                "ty": "tr",
+                                "p": { "a": 0, "k": [0, 0] },
+                                "a": { "a": 0, "k": [0, 0] },
+                                "s": { "a": 0, "k": [100, 100] },
+                                "r": { "a": 0, "k": 0 },
+                                "o": { "a": 0, "k": 100 }
+                            }
+                        ]
+                    }
+                ],
+                "ip": 0,
+                "op": 90,
+                "st": 0
+            }
+        ]
+    };
 
     if (isLoading) return <Loading></Loading>
 
@@ -43,17 +146,32 @@ const AddLesson = () => {
 
                 axiosSecure.post('/lessons', data)
                     .then(res => {
-                        console.log('after saving premium', res.data)
+                        console.log('after saving premium', res.data);
+
+                        // Show Lottie animation
+                        setShowSuccess(true);
+
+                        // Reset form after 2 seconds
+                        setTimeout(() => {
+                            setShowSuccess(false);
+                            reset();
+                        }, 2500);
+
                     })
                     .catch(err => {
                         console.log('Error: ', err);
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Failed to add lesson. Please try again.",
+                            icon: "error"
+                        });
                     })
 
-                Swal.fire({
-                    title: "Yahooo!",
-                    text: "Your lesson successfully added.",
-                    icon: "success"
-                });
+                // Swal.fire({
+                //     title: "Yahooo!",
+                //     text: "Your lesson successfully added.",
+                //     icon: "success"
+                // });
 
             }
         });
@@ -61,6 +179,22 @@ const AddLesson = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8 px-4">
+
+            {/* Success Animation Overlay (lottie) */}
+            {showSuccess && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-md mx-4 text-center">
+                        <Lottie
+                            animationData={successAnimation}
+                            loop={false}
+                            style={{ width: 200, height: 200, margin: '0 auto' }}
+                        />
+                        <h2 className="text-2xl font-bold text-slate-900 mt-4">Lesson Added Successfully!</h2>
+                        <p className="text-slate-600 mt-2">Your life lesson has been shared with the community.</p>
+                    </div>
+                </div>
+            )}
+
             <div className="max-w-3xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
