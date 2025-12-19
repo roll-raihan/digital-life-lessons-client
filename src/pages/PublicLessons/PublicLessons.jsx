@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import Loading from '../../components/shared/Loading';
 import { motion } from "framer-motion";
@@ -11,6 +11,8 @@ const PublicLessons = () => {
 
     const axiosSecure = useAxiosSecure();
     const { user } = useAuth();
+    const [searchText, setSearchText] = useState('');
+    const [debouncedSearch, setDebouncedSearch] = useState('');
 
     const { data: userData = [], isLoading: userLoading } = useQuery({
         queryKey: ['isPremium', user?.email],
@@ -20,10 +22,18 @@ const PublicLessons = () => {
         }
     })
 
+    useEffect(() => {
+        const delay = setTimeout(() => {
+            setDebouncedSearch(searchText);
+        }, 500);
+
+        return () => clearTimeout(delay);
+    }, [searchText]);
+
     const { data: lessons = [], isLoading: lessonLoading } = useQuery({
-        queryKey: ['public-lessons', user?.email],
+        queryKey: ['public-lessons', debouncedSearch],
         queryFn: async () => {
-            const res = await axiosSecure.get('/lessons')
+            const res = await axiosSecure.get(`/lessons?searchText=${debouncedSearch}`)
             return res.data;
         }
     })
@@ -32,13 +42,27 @@ const PublicLessons = () => {
         return <Loading></Loading>
     }
 
-    // const handleDetails = id => {
-    //     console.log(id)
-    // }
-
     return (
         <div className="max-w-7xl mx-auto px-4 py-10">
             <h1 className="text-3xl font-bold mb-8">🌍 Public Life Lessons</h1>
+            <p>Search: {searchText}</p>
+            <form onSubmit={(e) => e.preventDefault()}>
+                <label className="input mb-5">
+                    <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <g
+                            strokeLinejoin="round"
+                            strokeLinecap="round"
+                            strokeWidth="2.5"
+                            fill="none"
+                            stroke="currentColor"
+                        >
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </g>
+                    </svg>
+                    <input onChange={(e) => setSearchText(e.target.value)} type="search" placeholder="Search by Title" />
+                </label>
+            </form>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {lessons.map(lesson => {
                     const isPremiumLocked = lesson.lessonAccess === "premium" && !userData?.isPremium;
@@ -94,7 +118,6 @@ const PublicLessons = () => {
 
 
                                     <Link to={`/public-lessons/${lesson._id}`}
-                                        // onClick={() => handleDetails(lesson._id)}
                                         className="btn w-full mt-4"
                                         disabled={isPremiumLocked}
                                     >
