@@ -7,13 +7,40 @@ import Swal from 'sweetalert2';
 const ManageLessons = () => {
 
     const axiosSecure = useAxiosSecure();
-    const { data: lessons = [], isLoading,refetch } = useQuery({
+    const { data: lessons = [], isLoading, refetch } = useQuery({
         queryKey: ['lessons'],
         queryFn: async () => {
             const res = await axiosSecure.get('/lessons')
             return res.data;
         }
     })
+
+    const handleReview = id => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to review this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, review it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosSecure.patch(`/lessons/${id}/review`)
+                    .then(() => {
+                        refetch();
+                        Swal.fire({
+                            title: "Reviewed!",
+                            text: "This lesson has been reviewed.",
+                            icon: "success"
+                        });
+                    })
+                    .catch(err => {
+                        console.log('Error in manage user review:', err)
+                    })
+            }
+        })
+    }
 
     const handleFeature = id => {
         Swal.fire({
@@ -31,12 +58,39 @@ const ManageLessons = () => {
                         refetch();
                         Swal.fire({
                             title: "Featured!",
-                            text: "Your file has been featured.",
+                            text: "This lesson has been featured.",
                             icon: "success"
                         });
                     })
                     .catch(err => {
-                        console.log('Error in manage user:', err)
+                        console.log('Error in manage user feature:', err)
+                    })
+            }
+        });
+    }
+
+    const handleDelete = id => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosSecure.delete(`/lessons/${id}`)
+                    .then(() => {
+                        refetch();
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "This lesson has been deleted.",
+                            icon: "success"
+                        });
+                    })
+                    .catch(err => {
+                        console.log('Error in manage user delete:', err)
                     })
             }
         });
@@ -64,12 +118,17 @@ const ManageLessons = () => {
                             <td>{lesson?.lessonTitle}</td>
                             <td>{lesson?.email}</td>
                             <td className='flex gap-2'>
-                                <button className='btn btn-sm'>
-                                    Review
-                                </button>
-                                <button onClick={() => handleFeature(lesson?._id)} className='btn btn-sm'>
-                                    Feature
-                                </button>
+                                {
+                                    lesson?.isReviewed ? <button className='btn btn-warning btn-sm'>Reviewed</button> : <button onClick={() => handleReview(lesson._id)} className='btn btn-sm  btn-warning btn-outline'>
+                                        Review
+                                    </button>
+                                }
+                                {
+                                    lesson?.isFeatured ? <button className='btn btn-success btn-sm'>Featured</button> : <button onClick={() => handleFeature(lesson?._id)} className='btn btn-sm btn-success btn-outline'>
+                                        Feature
+                                    </button>
+                                }
+                                <button onClick={() => handleDelete(lesson._id)} className='btn btn-sm btn-error btn-outline'>Remove</button>
                             </td>
                         </tr>)
                     }
