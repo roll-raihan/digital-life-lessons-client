@@ -76,11 +76,11 @@ const PublicLessons = () => {
                     onChange={(e) => setCategory(e.target.value)}
                 >
                     <option value="">All Categories</option>
-                    <option value="Personal Growth">Personal Growth</option>
+                    <option value="Personal-Growth">Personal Growth</option>
                     <option value="Career">Career</option>
                     <option value="Relationships">Relationships</option>
                     <option value="Mindset">Mindset</option>
-                    <option value="Mistakes Learned">Mistakes Learned</option>
+                    <option value="Mistakes-Learned">Mistakes Learned</option>
                 </select>
 
                 {/* Emotion Filter */}
