@@ -6,6 +6,7 @@ import { Eye, EyeOff, Lock, Unlock, Info, Heart, Bookmark, Calendar, Edit, Trash
 import Swal from 'sweetalert2';
 import { Link, useNavigate } from 'react-router';
 import EditLessonModal from './EditLessonModal';
+import Loading from '../../components/shared/Loading';
 
 const MyLessons = () => {
 
@@ -13,7 +14,7 @@ const MyLessons = () => {
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
     const [editingLessonId, setEditingLessonId] = useState(null);
-    const { data: lessons = [], refetch } = useQuery({
+    const { data: lessons = [], refetch, isLoading } = useQuery({
         queryKey: ['my-lessons', user?.email],
         queryFn: async () => {
             const res = await axiosSecure.get(`/lessons?email=${user.email}`);
@@ -59,6 +60,11 @@ const MyLessons = () => {
         setEditingLessonId(id);
     };
 
+    const filterTotalReaction = lessons.filter((lesson) => lesson.reactions > 0);
+    const filterTotalSave = lessons.filter((lesson) => lesson.saves > 0);
+
+    if (isLoading) return <Loading></Loading>
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
             <div className="max-w-7xl mx-auto">
@@ -86,7 +92,7 @@ const MyLessons = () => {
                             <div>
                                 <p className="text-sm text-slate-600 mb-1">Total Reactions</p>
                                 <p className="text-2xl font-bold text-slate-800">
-                                    {lessons?.reduce((sum, lesson) => sum + lesson.reactions, 0) || '0'}
+                                    {filterTotalReaction?.length || '0'}
                                 </p>
                             </div>
                             <div className="bg-red-100 p-3 rounded-lg">
@@ -99,7 +105,7 @@ const MyLessons = () => {
                             <div>
                                 <p className="text-sm text-slate-600 mb-1">Total Saves</p>
                                 <p className="text-2xl font-bold text-slate-800">
-                                    {lessons?.reduce((sum, lesson) => sum + lesson.saves, 0) || '0'}
+                                    {filterTotalSave?.length || '0'}
                                 </p>
                             </div>
                             <div className="bg-amber-100 p-3 rounded-lg">
