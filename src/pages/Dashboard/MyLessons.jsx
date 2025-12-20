@@ -21,8 +21,6 @@ const MyLessons = () => {
         }
     })
 
-    const isPremiumUser = true;
-
     const handleDetailsLesson = (id) => {
         navigate(`/dashboard/my-lessons/${id}`);
     }
@@ -190,8 +188,8 @@ const MyLessons = () => {
                                                 className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${lesson.lessonAccess === 'premium'
                                                     ? 'bg-purple-100 text-purple-700 hover:bg-purple-200'
                                                     : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                                                    } ${!isPremiumUser ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                                disabled={!isPremiumUser}
+                                                    }`
+                                                }
                                             >
                                                 {lesson.lessonAccess === 'premium' ? (
                                                     <>

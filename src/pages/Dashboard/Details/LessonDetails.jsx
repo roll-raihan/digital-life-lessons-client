@@ -1,18 +1,17 @@
 import React from 'react';
-import { Link, useNavigate, useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 import Loading from '../../../components/shared/Loading';
 import { Lock, Heart, Bookmark, Flag, Share2, Eye } from 'lucide-react';
+import Swal from 'sweetalert2';
 
-const LessonDetails = ({ isPremiumLesson = false, isUserPremium = false }) => {
+const LessonDetails = () => {
 
     const { id } = useParams();
     const axiosSecure = useAxiosSecure();
-    const navigate = useNavigate();
-    const isLocked = isPremiumLesson && !isUserPremium;
 
-    const { data: lesson = [], isLoading, error } = useQuery({
+    const { data: lesson = [], isLoading, error, refetch } = useQuery({
         queryKey: ['public-lessons', id],
         queryFn: async () => {
             const res = await axiosSecure.get(`/lessons/${id}`);
@@ -20,35 +19,52 @@ const LessonDetails = ({ isPremiumLesson = false, isUserPremium = false }) => {
         }
     })
 
+    const handleLike = id => {
+        axiosSecure.patch(`lessons/${id}/reaction`)
+            .then((res) => {
+                if (res.data.modifiedCount) {
+                    refetch();
+                    Swal.fire({
+                        title: "Liked!",
+                        icon: "success",
+                        draggable: true,
+                        timer: 1000
+                    });
+                }
+
+            }).catch(err => {
+                console.log('Error in handle like', err)
+            })
+    }
+    const handleSave = id => {
+        axiosSecure.patch(`lessons/${id}/save`)
+            .then((res) => {
+                if (res.data.modifiedCount) {
+                    refetch();
+                    Swal.fire({
+                        title: "Saved!",
+                        icon: "success",
+                        draggable: true,
+                        timer: 1000
+                    });
+                }
+
+            }).catch(err => {
+                console.log('Error in handle save', err)
+            })
+    }
+
     if (isLoading) return <Loading></Loading>;
     if (error) return <p>Failed to load lesson</p>;
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-10">
-            {/* ================= Premium Lock Banner ================= */}
-            {isLocked && (
-                <div className="mb-6 rounded-2xl border border-yellow-300 bg-yellow-50 p-5 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                        <Lock className="text-yellow-600" />
-                        <p className="text-yellow-800 font-medium">
-                            This is a <span className="font-semibold">Premium Lesson</span>. Upgrade to unlock full content.
-                        </p>
-                    </div>
-                    <button
-                        onClick={() => navigate('/be-premium')}
-                        className="px-6 py-2 rounded-xl bg-yellow-600 text-white font-semibold hover:bg-yellow-700 transition"
-                    >
-                        Upgrade to Premium ⭐
-                    </button>
-                </div>
-            )}
-
             {/* ================= Main Grid ================= */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* ================= Lesson Content ================= */}
                 <div className="lg:col-span-2">
                     {/* Lesson Info */}
-                    <div className={`${isLocked ? 'blur-md select-none' : ''}`}>
+                    <div className=''>
                         <h1 className="text-3xl font-bold mb-3">{lesson?.lessonTitle || 'Lesson Title'}</h1>
 
                         <div className="flex flex-wrap gap-3 text-sm text-gray-600 mb-4">
@@ -64,10 +80,10 @@ const LessonDetails = ({ isPremiumLesson = false, isUserPremium = false }) => {
 
                     {/* ================= Interaction Buttons ================= */}
                     <div className="mt-8 flex flex-wrap gap-4">
-                        <button className="flex items-center gap-2 px-5 py-2 rounded-xl border hover:bg-gray-50">
+                        <button onClick={() => handleLike(lesson._id)} className="flex items-center gap-2 px-5 py-2 rounded-xl border hover:bg-gray-50">
                             <Heart className="text-red-500" /> Like
                         </button>
-                        <button className="flex items-center gap-2 px-5 py-2 rounded-xl border hover:bg-gray-50">
+                        <button onClick={() => handleSave(lesson._id)} className="flex items-center gap-2 px-5 py-2 rounded-xl border hover:bg-gray-50">
                             <Bookmark /> Save
                         </button>
                         <button className="flex items-center gap-2 px-5 py-2 rounded-xl border hover:bg-gray-50">
@@ -108,8 +124,8 @@ const LessonDetails = ({ isPremiumLesson = false, isUserPremium = false }) => {
                     <div className="rounded-2xl border p-5">
                         <h3 className="font-semibold mb-4">📊 Engagement</h3>
                         <div className="space-y-2 text-sm">
-                            <p className="flex items-center gap-2">❤️ {lesson?.reactions || '1.2K Likes'}</p>
-                            <p className="flex items-center gap-2">🔖 {lesson?.saves || '342 Favorites'}</p>
+                            <p className="flex items-center gap-2">❤️ {lesson?.reactions || '0'}</p>
+                            <p className="flex items-center gap-2">🔖 {lesson?.saves || '0'}</p>
                             <p className="flex items-center gap-2">
                                 <Eye size={16} /> {Math.floor(Math.random() * 10000)} Views
                             </p>
