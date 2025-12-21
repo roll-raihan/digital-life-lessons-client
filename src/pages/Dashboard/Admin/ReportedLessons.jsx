@@ -26,19 +26,46 @@ const ReportedLessons = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log('id:',id)
-                axiosSecure.delete(`/reports/${id}`)
+                axiosSecure.delete(`/lessons/${id}`)
                     .then(() => {
                         refetch();
                         Swal.fire({
                             title: "Deleted!",
-                            text: "Your file has been deleted.",
+                            text: "This lesson has been deleted permanently.",
                             icon: "success",
                             timer: 1500
                         });
                     })
                     .catch(err => {
                         console.log('Error in report lesson delete', err)
+                    })
+            }
+        });
+    }
+
+    const handleIgnore = id => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to ignore this report!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, ignore it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosSecure.delete(`/reports/${id}`)
+                    .then(() => {
+                        refetch();
+                        Swal.fire({
+                            title: "Ignored!",
+                            text: "Report is not valid for this lesson.",
+                            icon: "success",
+                            timer: 1500
+                        });
+                    })
+                    .catch(err => {
+                        console.log('Error in report lesson ignore', err)
                     })
             }
         });
@@ -105,10 +132,10 @@ const ReportedLessons = () => {
                                         </dialog>
 
                                         {/* btn for delete lesson */}
-                                        <button onClick={() => handleDeleteLesson(item.lessonId)} className='btn btn-soft btn-sm btn-warning'>Delete Lesson</button>
+                                        <button onClick={() => handleDeleteLesson(item._id)} className='btn btn-soft btn-sm btn-warning'>Delete Lesson</button>
 
                                         {/* btn for ignore report */}
-                                        <button className='btn btn-soft btn-sm btn-error'>Ignore</button>
+                                        <button onClick={() => handleIgnore(item.lessonId)} className='btn btn-soft btn-sm btn-error'>Ignore</button>
                                     </td>
                                 </tr>
                             ))
