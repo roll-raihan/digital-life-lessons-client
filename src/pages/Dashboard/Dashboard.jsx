@@ -1,6 +1,6 @@
 import React from 'react';
 import { IoIosAddCircle } from 'react-icons/io';
-import { MdAdminPanelSettings, MdFavorite, MdOutlineManageSearch, MdPlayLesson } from 'react-icons/md';
+import { MdAdminPanelSettings, MdFavorite, MdOutlineManageSearch, MdPlayLesson, MdReport } from 'react-icons/md';
 import { GiCaptainHatProfile } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
 import { Link, Outlet } from 'react-router';
@@ -94,6 +94,14 @@ const Dashboard = () => {
                                     <Link to='/dashboard/admin/manage-lessons' className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Lessons">
                                         <MdOutlineManageSearch />
                                         <span className="is-drawer-close:hidden">Manage Lessons</span>
+                                    </Link>
+                                </li>
+                                
+                                {/* reported lessons */}
+                                <li>
+                                    <Link to='/dashboard/admin/reported-lessons' className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Reported Lessons">
+                                        <MdReport />
+                                        <span className="is-drawer-close:hidden">Reported Lessons</span>
                                     </Link>
                                 </li>
                                 

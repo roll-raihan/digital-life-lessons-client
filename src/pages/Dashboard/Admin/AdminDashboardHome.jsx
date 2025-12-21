@@ -48,7 +48,9 @@ const AdminDashboardHome = () => {
                 <h3 className='font-semibold text-2xl mb-2'>Total Users: <span className='italic font-bold'>{userData?.length || '0'}</span></h3>
                 <h3 className='font-semibold text-2xl mb-2'>Total Public Lesson: <span className='italic font-bold'>{filterPublicLesson?.length || '0'}</span></h3>
                 <h3 className='font-semibold text-2xl mb-2'>Total Flagged Lesson: <span className='italic font-bold'>{report?.length || '0'}</span></h3>
-                <h3 className='font-semibold text-2xl mb-2'>Most Active Contributor: <span className='italic font-bold'>{userData?.length || '0'}</span></h3>
+
+                {/* <h3 className='font-semibold text-2xl mb-2'>Most Active Contributor: <span className='italic font-bold'>{userData?.length || '0'}</span></h3> */}
+
             </div>
             <div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-6">
@@ -56,7 +58,7 @@ const AdminDashboardHome = () => {
                 </h3>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {
-                        newLessons.map((lesson) => 
+                        newLessons.map((lesson) =>
                             <div key={lesson?._id}
                                 className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden"
                             >
