@@ -18,6 +18,14 @@ const ManageLessons = () => {
         }
     })
 
+    const { data: report = [], isLoading: reportLoading } = useQuery({
+        queryKey: ['report-lesson'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/reports');
+            return res.data;
+        }
+    })
+
     const handleReview = id => {
         Swal.fire({
             title: "Are you sure?",
@@ -101,9 +109,8 @@ const ManageLessons = () => {
 
     const filterPublic = lessons.filter((lesson) => lesson?.lessonPrivacy === 'public')
     const filterPrivate = lessons.filter((lesson) => lesson?.lessonPrivacy === 'private')
-    const filterFlagged = lessons.filter((lesson) => lesson?.isFlagged === true)
 
-    if (isLoading) return <Loading></Loading>
+    if (isLoading || reportLoading) return <Loading></Loading>
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-10">
@@ -230,7 +237,7 @@ const ManageLessons = () => {
                             <p className="text-gray-600 text-sm font-medium mb-1">Flagged Lessons</p>
                             <p className="text-4xl font-bold text-red-600">
                                 {
-                                    filterFlagged?.length || '0'
+                                    report?.length || '0'
                                 }
                             </p>
                         </div>
