@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Link, useParams } from 'react-router';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
@@ -12,7 +11,6 @@ const LessonDetails = () => {
     const { id } = useParams();
     const axiosSecure = useAxiosSecure();
     const { user } = useAuth();
-    const [reportIssue, setReportIssue] = useState(false);
 
     const { data: lesson = [], isLoading, error, refetch } = useQuery({
         queryKey: ['public-lessons', id],
@@ -91,7 +89,7 @@ const LessonDetails = () => {
                     reason: reason
                 };
 
-                axiosSecure.post('/lessons/report', reportData)
+                axiosSecure.post('/reports', reportData)
                     .then(res => {
                         if (res.data.insertedId) {
                             Swal.fire({
@@ -182,7 +180,7 @@ const LessonDetails = () => {
                         />
                         <h4 className="font-semibold">{lesson?.creator?.name || 'Author Name'}</h4>
                         <p className="text-sm text-gray-500 mb-3">2 Lessons Shared</p>
-                        <Link className="btn btn-active w-full px-4 py-2 rounded-xl border hover:bg-gray-50">
+                        <Link to={`/`} className="btn btn-active w-full px-4 py-2 rounded-xl border hover:bg-gray-50">
                             View all lessons
                         </Link>
                     </div>

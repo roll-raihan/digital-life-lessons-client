@@ -60,8 +60,8 @@ const MyLessons = () => {
         setEditingLessonId(id);
     };
 
-    const filterTotalReaction = lessons.filter((lesson) => lesson.reactions > 0);
-    const filterTotalSave = lessons.filter((lesson) => lesson.saves > 0);
+    const totalReactions = lessons.reduce((sum, lesson) => sum + (lesson.reactions || 0), 0);
+    const totalSaves = lessons.reduce((sum, lesson) => sum + (lesson.saves || 0), 0);
 
     if (isLoading) return <Loading></Loading>
 
@@ -92,7 +92,7 @@ const MyLessons = () => {
                             <div>
                                 <p className="text-sm text-slate-600 mb-1">Total Reactions</p>
                                 <p className="text-2xl font-bold text-slate-800">
-                                    {filterTotalReaction?.length || '0'}
+                                    {totalReactions}
                                 </p>
                             </div>
                             <div className="bg-red-100 p-3 rounded-lg">
@@ -105,7 +105,7 @@ const MyLessons = () => {
                             <div>
                                 <p className="text-sm text-slate-600 mb-1">Total Saves</p>
                                 <p className="text-2xl font-bold text-slate-800">
-                                    {filterTotalSave?.length || '0'}
+                                    {totalSaves}
                                 </p>
                             </div>
                             <div className="bg-amber-100 p-3 rounded-lg">

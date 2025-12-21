@@ -349,8 +349,8 @@ const AddLesson = () => {
                                 >
                                     {
                                         userData?.isPremium === true ? <>
-                                            <option value="premium">Premium - Only for premium members</option>
                                             <option value="free">Free - Available to all users</option>
+                                            <option value="premium">Premium - Only for premium members</option>
                                         </> : <option value="free">Free - Available to all users</option>
                                     }
 

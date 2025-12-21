@@ -124,21 +124,21 @@ const PublicLessons = () => {
                                 <div className={`space-y-3 ${isPremiumLocked ? "blur-sm" : ""}`}>
                                     <h2 className="text-xl font-semibold">{lesson.lessonTitle}</h2>
                                     <p className="text-sm text-muted-foreground line-clamp-2">
-                                        {lesson.lessonDescription}
+                                        {lesson?.lessonDescription}
                                     </p>
 
 
                                     <div className="flex flex-wrap gap-2 text-xs">
-                                        <span className="px-2 py-1 bg-muted rounded">{lesson.lessonCategory}</span>
-                                        <span className="px-2 py-1 bg-muted rounded">{lesson.
+                                        <span className="px-2 py-1 bg-muted rounded">{lesson?.lessonCategory}</span>
+                                        <span className="px-2 py-1 bg-muted rounded">{lesson?.
                                             lessonEmotion}</span>
-                                        <span className="px-2 py-1 bg-muted rounded capitalize">{lesson.accessLevel}</span>
+                                        <span className="px-2 py-1 bg-muted border rounded capitalize">{lesson?.lessonPrivacy}</span>
                                     </div>
 
 
                                     <div className="flex items-center gap-3 mt-4">
                                         <img
-                                            src={lesson?.creator?.photo}
+                                            src={lesson?.creator?.photoURL}
                                             alt={lesson?.creator?.name}
                                             className="w-8 h-8 rounded-full"
                                         />

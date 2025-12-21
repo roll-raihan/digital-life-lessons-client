@@ -26,6 +26,8 @@ const Profile = () => {
         },
     });
 
+    const totalSaves = lessons.reduce((sum, lesson) => sum + (lesson.saves || 0), 0);
+
     if (userLoading || lessonsLoading) {
         return <Loading />;
     }
@@ -86,7 +88,7 @@ const Profile = () => {
                     </div>
 
                     <div className="bg-gray-50 rounded-xl p-4 text-center">
-                        <p className="text-2xl font-bold text-indigo-600">{lessons?.saves || '0'}</p>
+                        <p className="text-2xl font-bold text-indigo-600">{totalSaves}</p>
                         <p className="text-gray-500 text-sm">Lessons Saved</p>
                     </div>
 

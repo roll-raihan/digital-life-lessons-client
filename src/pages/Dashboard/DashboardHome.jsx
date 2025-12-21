@@ -40,13 +40,15 @@ const DashboardHome = () => {
         }, {})
     );
 
+    const totalSaves = lessons.reduce((sum, lesson) => sum + (lesson.saves || 0), 0);
+
     if (isLoading) return <Loading />;
 
     return (
         <div className='space-y-8'>
             <div className='card m-10 border border-gray-400 p-10'>
                 <h3 className='font-bold'>Total Lesson Created: {lessons?.length || '0'}</h3>
-                <h3 className='font-bold'>Total Lesson saved: {lessons.saves || '0'}</h3>
+                <h3 className='font-bold'>Total Lesson saved: {totalSaves}</h3>
             </div>
             <div className='m-5'>
                 <h3 className='font-bold text-center'>Recently Added Lessons:</h3>
