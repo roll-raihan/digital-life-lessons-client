@@ -169,7 +169,17 @@ npm run start
 ```
 
 ---
+## 🤝 Contributing
 
+Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
+
+## 👨‍💻 Author
+
+**Your Name**
+- GitHub: [roll-raihan](https://github.com/yourusername)
+- LinkedIn: [My LinkedIn](https://www.linkedin.com/in/raihan-ahmed-nasim/)
+
+---
 
 ## 🧾 License
 
