@@ -97,7 +97,7 @@ const Register = () => {
     }
 
     return (
-        <div className='card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl my-10 mx-auto'>
+        <div className='card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl my-10 mx-auto mt-16'>
             <h1 className="text-5xl font-bold text-center my-4">Register now!</h1>
             <ToastContainer></ToastContainer>
             <form className='card-body' onSubmit={handleSubmit(handleRegister)}>

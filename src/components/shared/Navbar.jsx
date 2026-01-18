@@ -55,7 +55,7 @@ const Navbar = () => {
     </>
 
     return (
-        <div className="navbar bg-base-100 shadow-sm">
+        <div className="navbar bg-base-100 shadow-sm fixed left-0 right-0 top-0 z-50 container mx-auto">
             <div className="navbar-start">
                 <ToastContainer></ToastContainer>
                 <div className="dropdown">

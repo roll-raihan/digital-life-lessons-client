@@ -12,7 +12,7 @@ const Dashboard = () => {
     const { role } = useRole();
 
     return (
-        <div className="drawer lg:drawer-open">
+        <div className="drawer lg:drawer-open mt-16">
             <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
             <div className="drawer-content">
                 <div><Outlet></Outlet></div>

@@ -7,7 +7,7 @@ import MostSavedLessons from '../../components/HomeComponents/MostSavedLesson';
 
 const Home = () => {
     return (
-        <div>
+        <div className='mt-16'>
             <Banner></Banner>
             <FeaturedLessons></FeaturedLessons>
             <LearningFromLife></LearningFromLife>

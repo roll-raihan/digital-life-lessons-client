@@ -123,7 +123,7 @@ const LessonDetails = () => {
     if (error) return <p>Failed to load lesson</p>;
 
     return (
-        <div className="max-w-6xl mx-auto px-4 py-10">
+        <div className="max-w-6xl mx-auto px-4 py-10 mt-16">
             {/* ================= Main Grid ================= */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* ================= Lesson Content ================= */}
