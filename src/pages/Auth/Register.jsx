@@ -37,7 +37,7 @@ const Register = () => {
                         axiosSecure.post('/users', userInfo)
                             .then(res => {
                                 if (res.data.insertedId) {
-                                    console.log('user created in the db')
+                                    // console.log('user created in the db')
                                 }
                             })
 
@@ -80,7 +80,7 @@ const Register = () => {
                 axiosSecure.post('/users', userInfo)
                     .then(res => {
                         if (res.data.insertedId) {
-                            console.log('user created in the db')
+                            // console.log('user created in the db')
                         }
                     })
 
@@ -142,6 +142,7 @@ const Register = () => {
                         Login with Google
                     </button>
                 </fieldset>
+                <p>Already have an account? Please, <Link to="/login" className='font-semibold text-blue-500 underline '>Login</Link></p>
             </form>
         </div>
     );

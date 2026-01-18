@@ -65,7 +65,7 @@ const LearningFromLife = () => {
 
                             <div className="p-6">
                                 <div className={`w-16 h-16 ${benefit.iconBg} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                                    <div className={`bg-gradient-to-br ${benefit.color} bg-clip-text text-transparent`}>
+                                    <div className="text-gray-700">
                                         {benefit.icon}
                                     </div>
                                 </div>
