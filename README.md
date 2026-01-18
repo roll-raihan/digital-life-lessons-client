@@ -4,9 +4,8 @@ A platform to create, store, and share meaningful life lessons, personal insight
 
 ### 🔗 Live Site
 
-👉 **Live URL:** *Add your live website link here*
-👉 **Client Repo:** *Add GitHub repo link*
-👉 **Server Repo:** *Add GitHub repo link*
+👉 **Live URL:** *[Live website link here](https://digital-life-lessons-a5382.web.app/)*
+👉 **Client Repo:** *[GitHub repo link](https://github.com/roll-raihan/digital-life-lessons-client.git)*
 
 ---
 
@@ -170,7 +169,17 @@ npm run start
 ```
 
 ---
+## 🤝 Contributing
 
+Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
+
+## 👨‍💻 Author
+
+**Your Name**
+- GitHub: [roll-raihan](https://github.com/yourusername)
+- LinkedIn: [My LinkedIn](https://www.linkedin.com/in/raihan-ahmed-nasim/)
+
+---
 
 ## 🧾 License
 
